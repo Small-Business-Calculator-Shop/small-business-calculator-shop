@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Cost & Pricing Calculator</title>
+
+<style>
+:root{
+  --bg:#f7f8fa;
+  --card:#ffffff;
+  --text:#17202a;
+  --muted:#667085;
+  --border:#dfe3e8;
+  --primary:#245c45;
+  --primary-dark:#174331;
+  --soft:#eef6f2;
+  --danger:#a33a3a;
+  --warning:#fff7e6;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+}
+
+header{
+  background:var(--primary);
+  color:white;
+  padding:28px 20px;
+}
+
+header .wrap{
+  max-width:980px;
+  margin:auto;
+}
+
+header h1{
+  margin:0 0 7px;
+  font-size:30px;
+}
+
+header p{
+  margin:0;
+  opacity:.9;
+}
+
+main{
+  max-width:980px;
+  margin:25px auto 60px;
+  padding:0 16px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+h2{
+  margin:0 0 6px;
+  font-size:21px;
+}
+
+.help{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+label{
+  display:block;
+  font-weight:600;
+  margin-bottom:5px;
+  font-size:14px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd2d9;
+  border-radius:9px;
+  font-size:16px;
+  background:white;
+}
+
+input:focus,select:focus{
+  outline:2px solid #8dbba7;
+  border-color:var(--primary);
+}
+
+.item{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin-top:14px;
+  background:#fcfcfd;
+}
+
+.item-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.item-head strong{
+  font-size:16px;
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:12px 16px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.primary{
+  background:var(--primary);
+  color:white;
+}
+
+.primary:hover{background:var(--primary-dark);}
+
+.secondary{
+  background:var(--soft);
+  color:var(--primary-dark);
+}
+
+.remove{
+  background:#f9eeee;
+  color:var(--danger);
+  padding:8px 11px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.calculate{
+  width:100%;
+  font-size:18px;
+  padding:16px;
+  margin-top:8px;
+}
+
+.results{
+  display:none;
+}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:15px;
+}
+
+.result-box{
+  background:var(--soft);
+  padding:16px;
+  border-radius:11px;
+}
+
+.result-box span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:4px;
+}
+
+.result-box strong{
+  font-size:23px;
+}
+
+.breakdown{
+  margin-top:20px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--border);
+  padding:10px 0;
+}
+
+.row:last-child{
+  border-bottom:0;
+}
+
+.warning{
+  background:var(--warning);
+  border-radius:9px;
+  padding:12px;
+  margin-top:15px;
+  display:none;
+}
+
+.error{
+  color:var(--danger);
+  margin-top:10px;
+  font-weight:600;
+  display:none;
+}
+
+.price-box{
+  background:#f8fafb;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:17px;
+  margin-top:18px;
+}
+
+.small{
+  color:var(--muted);
+  font-size:13px;
+}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  padding:20px;
+}
+
+@media(max-width:700px){
+  .grid,.grid-3,.result-grid{
+    grid-template-columns:1fr;
+  }
+
+  header h1{
+    font-size:25px;
+  }
+
+  .card{
+    padding:17px;
+  }
+}
+
+@media print{
+  header,.input-section,.actions,.calculate,.remove,footer{
+    display:none !important;
+  }
+
+  body{
+    background:white;
+  }
+
+  main{
+    max-width:none;
+    margin:0;
+  }
+
+  .card{
+    border:0;
+    box-shadow:none;
+  }
+
+  .results{
+    display:block !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Product Cost & Pricing Calculator</h1>
+    <p>Find out what your product really costs to make—and what happens when you sell it.</p>
+  </div>
+</header>
+
+<main>
+
+<div class="card input-section">
+  <h2>1. Your Product</h2>
+  <p class="help">Start with the basic information about this production batch.</p>
+
+  <div class="grid">
+    <div>
+      <label for="productName">Product name</label>
+      <input id="productName" type="text" placeholder="Example: Lavender Body Oil">
+    </div>
+
+    <div>
+      <label for="yield">How many finished products does this batch make?</label>
+      <input id="yield" type="number" min="0" step="1" placeholder="Example: 12">
+    </div>
+  </div>
+</div>
+
+<div class="card input-section">
+  <h2>2. Ingredients</h2>
+  <p class="help">
+    Enter what you bought, what you paid, and how much you use. We'll calculate the ingredient cost automatically.
+  </p>
+
+  <div id="ingredients"></div>
+
+  <div class="actions">
+    <button class="secondary" type="button" onclick="addIngredient()">+ Add Ingredient</button>
+  </div>
+</div>
+
+<div class="card input-section">
+  <h2>3. Packaging & Supplies</h2>
+  <p class="help">
+    Enter the quantity you bought and the total price you paid. Do not calculate the cost per item yourself.
+  </p>
+
+  <div id="packaging"></div>
+
+  <div class="actions">
+    <button class="secondary" type="button" onclick="addPackaging()">+ Add Packaging or Supply</button>
+  </div>
+</div>
+
+<div class="card input-section">
+  <h2>4. Labor & Other Costs</h2>
+  <p class="help">Tell us how long the batch takes and what you want to earn per hour.</p>
+
+  <div class="grid">
+    <div>
+      <label for="laborMinutes">Time to make this batch (minutes)</label>
+      <input id="laborMinutes" type="number" min="0" step="1" placeholder="Example: 90">
+    </div>
+
+    <div>
+      <label for="hourlyRate">Desired hourly rate ($)</label>
+      <input id="hourlyRate" type="number" min="0" step=".01" placeholder="Example: 20">
+    </div>
+
+    <div>
+      <label for="otherCosts">Other batch costs ($)</label>
+      <input id="otherCosts" type="number" min="0" step=".01" placeholder="Example: 5.00">
+    </div>
+
+    <div>
+      <label for="sellingPrice">Your selling price per product ($)</label>
+      <input id="sellingPrice" type="number" min="0" step=".01" placeholder="Optional">
+    </div>
+  </div>
+</div>
+
+<div class="card input-section">
+  <button class="primary calculate" type="button" onclick="calculate()">
+    Calculate My Product Cost
+  </button>
+
+  <div id="error" class="error"></div>
+</div>
+
+<div id="results" class="card results">
+  <h2>Your Results</h2>
+  <p id="resultProduct" class="help"></p>
+
+  <div class="result-grid">
+    <div class="result-box">
+      <span>Total batch cost</span>
+      <strong id="totalBatch">$0.00</strong>
+    </div>
+
+    <div class="result-box">
+      <span>Cost per finished product</span>
+      <strong id="unitCost">$0.00</strong>
+    </div>
+
+    <div class="result-box">
+      <span>Batch yield</span>
+      <strong id="resultYield">0</strong>
+    </div>
+  </div>
+
+  <div class="breakdown">
+    <h2>Cost Breakdown</h2>
+
+    <div class="row">
+      <span>Ingredients</span>
+      <strong id="ingredientTotal">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Packaging & supplies</span>
+      <strong id="packagingTotal">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Labor</span>
+      <strong id="laborTotal">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Other costs</span>
+      <strong id="otherTotal">$0.00</strong>
+    </div>
+  </div>
+
+  <div id="pricingResults" class="price-box" style="display:none">
+    <h2>At Your Selling Price</h2>
+
+    <div class="row">
+      <span>Selling price</span>
+      <strong id="salePrice">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Profit per product</span>
+      <strong id="profitUnit">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Profit margin</span>
+      <strong id="margin">0%</strong>
+    </div>
+
+    <div class="row">
+      <span>Potential profit if entire batch sells</span>
+      <strong id="batchProfit">$0.00</strong>
+    </div>
+  </div>
+
+  <div class="price-box">
+    <h2>Pricing Examples</h2>
+    <p class="small">
+      These are mathematical examples based on gross margin, not mandatory prices.
+    </p>
+
+    <div class="row">
+      <span>Price for 40% gross margin</span>
+      <strong id="margin40">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Price for 50% gross margin</span>
+      <strong id="margin50">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Price for 60% gross margin</span>
+      <strong id="margin60">$0.00</strong>
+    </div>
+
+    <div class="row">
+      <span>Price for 70% gross margin</span>
+      <strong id="margin70">$0.00</strong>
+    </div>
+  </div>
+
+  <div id="warning" class="warning"></div>
+
+  <div class="actions">
+    <button class="primary" type="button" onclick="window.print()">Print / Save Report</button>
+    <button class="secondary" type="button" onclick="resetCalculator()">Start New Product</button>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  Small Business Calculator Shop
+</footer>
+
+<script>
+let ingredientCounter = 0;
+let packagingCounter = 0;
+
+const weightToGram = {
+  g: 1,
+  kg: 1000,
+  oz: 28.349523125,
+  lb: 453.59237
+};
+
+const volumeToMl = {
+  ml: 1,
+  l: 1000,
+  floz: 29.5735295625
+};
+
+function money(value){
+  return "$" + Number(value || 0).toFixed(2);
+}
+
+function num(value){
+  const n = parseFloat(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function escapeHTML(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function unitDimension(unit){
+  if(weightToGram[unit]) return "weight";
+  if(volumeToMl[unit]) return "volume";
+  return null;
+}
+
+function convert(value, from, to){
+  const fromDim = unitDimension(from);
+  const toDim = unitDimension(to);
+
+  if(!fromDim || !toDim || fromDim !== toDim){
+    return null;
+  }
+
+  if(fromDim === "weight"){
+    return value * weightToGram[from] / weightToGram[to];
+  }
+
+  return value * volumeToMl[from] / volumeToMl[to];
+}
+
+function unitOptions(){
+  return `
+    <option value="g">grams (g)</option>
+    <option value="kg">kilograms (kg)</option>
+    <option value="oz">ounces by weight (oz)</option>
+    <option value="lb">pounds (lb)</option>
+    <option value="ml">milliliters (mL)</option>
+    <option value="l">liters (L)</option>
+    <option value="floz">fluid ounces (fl oz)</option>
+  `;
+}
+
+function addIngredient(){
+  ingredientCounter++;
+
+  const div = document.createElement("div");
+  div.className = "item ingredient";
+  div.innerHTML = `
+    <div class="item-head">
+      <strong>Ingredient ${ingredientCounter}</strong>
+      <button class="remove" type="button" onclick="this.closest('.item').remove()">Remove</button>
+    </div>
+
+    <div class="grid">
+      <div>
+        <label>Ingredient name</label>
+        <input class="ing-name" type="text" placeholder="Example: Jojoba Oil">
+      </div>
+
+      <div>
+        <label>Total price paid ($)</label>
+        <input class="ing-price" type="number" min="0" step=".01" placeholder="Example: 12.00">
+      </div>
+
+      <div>
+        <label>Quantity purchased</label>
+        <input class="ing-purchase-qty" type="number" min="0" step=".0001" placeholder="Example: 8">
+      </div>
+
+      <div>
+        <label>Purchase unit</label>
+        <select class="ing-purchase-unit">${unitOptions()}</select>
+      </div>
+
+      <div>
+        <label>Amount used in this batch</label>
+        <input class="ing-used-qty" type="number" min="0" step=".0001" placeholder="Example: 2">
+      </div>
+
+      <div>
+        <label>Unit used</label>
+        <select class="ing-used-unit">${unitOptions()}</select>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("ingredients").appendChild(div);
+}
+
+function addPackaging(){
+  packagingCounter++;
+
+  const div = document.createElement("div");
+  div.className = "item package";
+  div.innerHTML = `
+    <div class="item-head">
+      <strong>Packaging / Supply ${packagingCounter}</strong>
+      <button class="remove" type="button" onclick="this.closest('.item').remove()">Remove</button>
+    </div>
+
+    <div class="grid">
+      <div>
+        <label>Item name</label>
+        <input class="pkg-name" type="text" placeholder="Example: 2 oz bottle">
+      </div>
+
+      <div>
+        <label>Quantity purchased</label>
+        <input class="pkg-purchased" type="number" min="0" step=".01" placeholder="Example: 50">
+      </div>
+
+      <div>
+        <label>Total price paid ($)</label>
+        <input class="pkg-price" type="number" min="0" step=".01" placeholder="Example: 75.00">
+      </div>
+
+      <div>
+        <label>How many are used for this batch?</label>
+        <input class="pkg-used" type="number" min="0" step=".01" placeholder="Example: 12">
+      </div>
+    </div>
+  `;
+
+  document.getElementById("packaging").appendChild(div);
+}
+
+function calculateIngredients(){
+  let total = 0;
+  let invalid = [];
+
+  document.querySelectorAll(".ingredient").forEach((item,index)=>{
+    const name = item.querySelector(".ing-name").value || `Ingredient ${index+1}`;
+    const price = num(item.querySelector(".ing-price").value);
+    const purchaseQty = num(item.querySelector(".ing-purchase-qty").value);
+    const purchaseUnit = item.querySelector(".ing-purchase-unit").value;
+    const usedQty = num(item.querySelector(".ing-used-qty").value);
+    const usedUnit = item.querySelector(".ing-used-unit").value;
+
+    if(price === 0 && purchaseQty === 0 && usedQty === 0) return;
+
+    if(purchaseQty <= 0){
+      invalid.push(`${name}: enter the quantity purchased.`);
+      return;
+    }
+
+    const usedInPurchaseUnit = convert(usedQty,usedUnit,purchaseUnit);
+
+    if(usedInPurchaseUnit === null){
+      invalid.push(
+        `${name}: weight and volume cannot be converted without the ingredient's density. Use compatible units.`
+      );
+      return;
+    }
+
+    const costPerPurchaseUnit = price / purchaseQty;
+    total += costPerPurchaseUnit * usedInPurchaseUnit;
+  });
+
+  return {total,invalid};
+}
+
+function calculatePackaging(){
+  let total = 0;
+  let invalid = [];
+
+  document.querySelectorAll(".package").forEach((item,index)=>{
+    const name = item.querySelector(".pkg-name").value || `Packaging item ${index+1}`;
+    const purchased = num(item.querySelector(".pkg-purchased").value);
+    const price = num(item.querySelector(".pkg-price").value);
+    const used = num(item.querySelector(".pkg-used").value);
+
+    if(purchased === 0 && price === 0 && used === 0) return;
+
+    if(purchased <= 0){
+      invalid.push(`${name}: enter the quantity purchased.`);
+      return;
+    }
+
+    const costEach = price / purchased;
+    total += costEach * used;
+  });
+
+  return {total,invalid};
+}
+
+function priceForMargin(cost,margin){
+  if(cost <= 0 || margin >= 1) return 0;
+  return cost / (1-margin);
+}
+
+function calculate(){
+  const error = document.getElementById("error");
+  error.style.display = "none";
+  error.innerHTML = "";
+
+  const productName = document.getElementById("productName").value.trim();
+  const yieldQty = num(document.getElementById("yield").value);
+
+  if(yieldQty <= 0){
+    error.textContent = "Enter how many finished products this batch makes.";
+    error.style.display = "block";
+    return;
+  }
+
+  const ingredients = calculateIngredients();
+  const packaging = calculatePackaging();
+
+  const problems = [...ingredients.invalid,...packaging.invalid];
+
+  if(problems.length){
+    error.innerHTML = problems.map(p => escapeHTML(p)).join("<br>");
+    error.style.display = "block";
+    return;
+  }
+
+  const minutes = num(document.getElementById("laborMinutes").value);
+  const hourly = num(document.getElementById("hourlyRate").value);
+  const labor = (minutes / 60) * hourly;
+
+  const other = num(document.getElementById("otherCosts").value);
+
+  const batchCost =
+    ingredients.total +
+    packaging.total +
+    labor +
+    other;
+
+  const unitCost = batchCost / yieldQty;
+
+  document.getElementById("resultProduct").textContent =
+    productName ? productName : "Product Cost Report";
+
+  document.getElementById("totalBatch").textContent = money(batchCost);
+  document.getElementById("unitCost").textContent = money(unitCost);
+  document.getElementById("resultYield").textContent = yieldQty;
+
+  document.getElementById("ingredientTotal").textContent = money(ingredients.total);
+  document.getElementById("packagingTotal").textContent = money(packaging.total);
+  document.getElementById("laborTotal").textContent = money(labor);
+  document.getElementById("otherTotal").textContent = money(other);
+
+  document.getElementById("margin40").textContent = money(priceForMargin(unitCost,.40));
+  document.getElementById("margin50").textContent = money(priceForMargin(unitCost,.50));
+  document.getElementById("margin60").textContent = money(priceForMargin(unitCost,.60));
+  document.getElementById("margin70").textContent = money(priceForMargin(unitCost,.70));
+
+  const sellingPrice = num(document.getElementById("sellingPrice").value);
+  const pricingBox = document.getElementById("pricingResults");
+  const warning = document.getElementById("warning");
+
+  warning.style.display = "none";
+
+  if(sellingPrice > 0){
+    const profit = sellingPrice - unitCost;
+    const margin = sellingPrice > 0 ? (profit / sellingPrice) * 100 : 0;
+    const batchProfit = profit * yieldQty;
+
+    document.getElementById("salePrice").textContent = money(sellingPrice);
+    document.getElementById("profitUnit").textContent = money(profit);
+    document.getElementById("margin").textContent = margin.toFixed(1) + "%";
+    document.getElementById("batchProfit").textContent = money(batchProfit);
+
+    pricingBox.style.display = "block";
+
+    if(profit < 0){
+      warning.textContent =
+        "Warning: At this selling price, you would lose money on each product.";
+      warning.style.display = "block";
+    }else if(margin < 30){
+      warning.textContent =
+        "Your calculated gross margin is below 30%. Check whether this leaves enough room for selling fees, discounts, taxes, overhead and unexpected costs.";
+      warning.style.display = "block";
+    }
+  }else{
+    pricingBox.style.display = "none";
+  }
+
+  document.getElementById("results").style.display = "block";
+  document.getElementById("results").scrollIntoView({behavior:"smooth"});
+}
+
+function resetCalculator(){
+  if(!confirm("Start a new product? This will clear the current entries.")) return;
+
+  document.getElementById("productName").value = "";
+  document.getElementById("yield").value = "";
+  document.getElementById("laborMinutes").value = "";
+  document.getElementById("hourlyRate").value = "";
+  document.getElementById("otherCosts").value = "";
+  document.getElementById("sellingPrice").value = "";
+
+  document.getElementById("ingredients").innerHTML = "";
+  document.getElementById("packaging").innerHTML = "";
+
+  ingredientCounter = 0;
+  packagingCounter = 0;
+
+  addIngredient();
+  addPackaging();
+
+  document.getElementById("results").style.display = "none";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* Start with one ingredient and one packaging item */
+addIngredient();
+addPackaging();
+</script>
+
+</body>
+</html>
