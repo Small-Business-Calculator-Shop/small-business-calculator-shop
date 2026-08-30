@@ -3,20 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Cost & Pricing Calculator</title>
+<meta name="theme-color" content="#245c45">
+
+<title>Small Business Calculator Shop</title>
 
 <style>
 :root{
-  --bg:#f7f8fa;
+  --bg:#f6f8f7;
   --card:#ffffff;
   --text:#17202a;
   --muted:#667085;
-  --border:#dfe3e8;
+  --border:#dfe6e3;
   --primary:#245c45;
   --primary-dark:#174331;
   --soft:#eef6f2;
-  --danger:#a33a3a;
   --warning:#fff7e6;
+  --danger:#a33a3a;
+  --success:#247a52;
+  --shadow:0 4px 18px rgba(0,0,0,.06);
 }
 
 *{box-sizing:border-box;}
@@ -29,242 +33,366 @@ body{
   line-height:1.45;
 }
 
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+}
+
 header{
-  background:var(--primary);
-  color:white;
-  padding:28px 20px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
 }
 
-header .wrap{
-  max-width:980px;
+.header-inner{
+  max-width:1200px;
   margin:auto;
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
 }
 
-header h1{
-  margin:0 0 7px;
-  font-size:30px;
+.brand{
+  font-weight:800;
+  color:var(--primary-dark);
+  font-size:1.05rem;
 }
 
-header p{
-  margin:0;
-  opacity:.9;
+.tagline{
+  font-size:.82rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.menu-btn{
+  border:1px solid var(--border);
+  background:white;
+  border-radius:10px;
+  padding:9px 12px;
+}
+
+nav{
+  max-width:1200px;
+  margin:auto;
+  padding:0 18px 12px;
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+}
+
+nav button{
+  white-space:nowrap;
+  border:0;
+  background:transparent;
+  padding:8px 11px;
+  border-radius:8px;
+  color:var(--muted);
+}
+
+nav button.active{
+  background:var(--soft);
+  color:var(--primary-dark);
+  font-weight:700;
 }
 
 main{
-  max-width:980px;
-  margin:25px auto 60px;
-  padding:0 16px;
+  max-width:1100px;
+  margin:auto;
+  padding:26px 18px 80px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  padding:18px 0 25px;
+}
+
+.hero h1{
+  font-size:clamp(1.8rem,5vw,3rem);
+  line-height:1.08;
+  margin:0 0 12px;
+}
+
+.hero p{
+  max-width:720px;
+  color:var(--muted);
+  font-size:1.05rem;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:15px;
 }
 
 .card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:14px;
-  padding:22px;
-  margin-bottom:18px;
-  box-shadow:0 2px 8px rgba(0,0,0,.04);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:var(--shadow);
 }
 
-h2{
-  margin:0 0 6px;
-  font-size:21px;
+.card h2,.card h3{
+  margin-top:0;
 }
 
-.help{
-  margin:0 0 18px;
+.choice{
+  text-align:left;
+  width:100%;
+  min-height:145px;
+  transition:.15s;
+}
+
+.choice:hover{
+  border-color:var(--primary);
+}
+
+.choice.selected{
+  border:2px solid var(--primary);
+  background:var(--soft);
+}
+
+.choice-icon{
+  font-size:1.7rem;
+  margin-bottom:10px;
+}
+
+.muted{
   color:var(--muted);
-  font-size:14px;
 }
 
-.grid{
+.small{
+  font-size:.88rem;
+}
+
+.section-title{
+  margin:28px 0 12px;
+}
+
+label{
+  display:block;
+  font-weight:650;
+  margin:0 0 7px;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1px solid #cfd8d4;
+  border-radius:10px;
+  padding:12px;
+  background:white;
+  min-height:46px;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.field{
+  margin-bottom:15px;
+}
+
+.form-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:14px;
 }
 
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
+.full{
+  grid-column:1/-1;
 }
 
-label{
-  display:block;
-  font-weight:600;
-  margin-bottom:5px;
-  font-size:14px;
-}
-
-input,select{
-  width:100%;
-  padding:12px;
-  border:1px solid #cbd2d9;
-  border-radius:9px;
-  font-size:16px;
-  background:white;
-}
-
-input:focus,select:focus{
-  outline:2px solid #8dbba7;
-  border-color:var(--primary);
-}
-
-.item{
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-  margin-top:14px;
-  background:#fcfcfd;
-}
-
-.item-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-}
-
-.item-head strong{
-  font-size:16px;
-}
-
-button{
+.btn{
   border:0;
-  border-radius:9px;
-  padding:12px 16px;
-  font-size:15px;
+  border-radius:10px;
+  padding:12px 17px;
+  min-height:46px;
   font-weight:700;
-  cursor:pointer;
 }
 
-.primary{
+.btn-primary{
   background:var(--primary);
   color:white;
 }
 
-.primary:hover{background:var(--primary-dark);}
-
-.secondary{
-  background:var(--soft);
-  color:var(--primary-dark);
+.btn-primary:hover{
+  background:var(--primary-dark);
 }
 
-.remove{
-  background:#f9eeee;
+.btn-secondary{
+  background:white;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.btn-danger{
+  background:#fff1f1;
   color:var(--danger);
-  padding:8px 11px;
+  border:1px solid #f1cccc;
 }
 
 .actions{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-top:16px;
+  margin-top:18px;
 }
 
-.calculate{
-  width:100%;
-  font-size:18px;
-  padding:16px;
-  margin-top:8px;
+.stat{
+  font-size:1.7rem;
+  font-weight:800;
+  color:var(--primary-dark);
 }
 
-.results{
-  display:none;
-}
-
-.result-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  margin-top:15px;
-}
-
-.result-box{
-  background:var(--soft);
-  padding:16px;
-  border-radius:11px;
-}
-
-.result-box span{
-  display:block;
+.stat-label{
   color:var(--muted);
-  font-size:13px;
-  margin-bottom:4px;
+  font-size:.85rem;
 }
 
-.result-box strong{
-  font-size:23px;
-}
-
-.breakdown{
-  margin-top:20px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  border-bottom:1px solid var(--border);
-  padding:10px 0;
-}
-
-.row:last-child{
-  border-bottom:0;
+.notice{
+  border-radius:12px;
+  padding:14px;
+  margin:14px 0;
+  background:var(--soft);
+  border:1px solid #cfe4da;
 }
 
 .warning{
   background:var(--warning);
-  border-radius:9px;
-  padding:12px;
-  margin-top:15px;
-  display:none;
+  border-color:#eed7a4;
 }
 
-.error{
+.danger{
+  background:#fff1f1;
+  border-color:#efc6c6;
+}
+
+.item-row{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr auto;
+  gap:8px;
+  align-items:end;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.remove{
+  border:0;
+  background:#fff1f1;
   color:var(--danger);
-  margin-top:10px;
-  font-weight:600;
-  display:none;
+  border-radius:9px;
+  height:44px;
+  padding:0 12px;
 }
 
-.price-box{
-  background:#f8fafb;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:17px;
-  margin-top:18px;
+.library-item{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  padding:13px 0;
 }
 
-.small{
+.library-item:last-child{
+  border-bottom:0;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  background:var(--soft);
+  color:var(--primary-dark);
+  font-size:.78rem;
+  font-weight:700;
+}
+
+.question{
+  font-size:1.15rem;
+  font-weight:750;
+}
+
+.result-big{
+  font-size:2rem;
+  font-weight:850;
+  color:var(--primary-dark);
+}
+
+.help-box{
+  background:#fafafa;
+  border-left:4px solid var(--primary);
+  padding:13px;
+  margin:12px 0;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.empty{
+  text-align:center;
+  padding:32px 12px;
   color:var(--muted);
-  font-size:13px;
+}
+
+hr{
+  border:0;
+  border-top:1px solid var(--border);
+  margin:22px 0;
 }
 
 footer{
   text-align:center;
   color:var(--muted);
-  font-size:13px;
-  padding:20px;
+  font-size:.8rem;
+  padding:25px;
 }
 
 @media(max-width:700px){
-  .grid,.grid-3,.result-grid{
+  .form-grid{
     grid-template-columns:1fr;
   }
 
-  header h1{
-    font-size:25px;
+  .item-row{
+    grid-template-columns:1fr 1fr;
   }
 
-  .card{
-    padding:17px;
+  .item-row .wide{
+    grid-column:1/-1;
+  }
+
+  .remove{
+    width:100%;
+  }
+
+  nav{
+    padding-bottom:10px;
   }
 }
 
 @media print{
-  header,.input-section,.actions,.calculate,.remove,footer{
-    display:none !important;
+  header,nav,.no-print,.btn{
+    display:none!important;
   }
 
   body{
@@ -272,17 +400,12 @@ footer{
   }
 
   main{
-    max-width:none;
-    margin:0;
+    padding:0;
   }
 
   .card{
-    border:0;
     box-shadow:none;
-  }
-
-  .results{
-    display:block !important;
+    break-inside:avoid;
   }
 }
 </style>
@@ -290,231 +413,1559 @@ footer{
 
 <body>
 
+<div class="app">
+
 <header>
-  <div class="wrap">
-    <h1>Product Cost & Pricing Calculator</h1>
-    <p>Find out what your product really costs to make—and what happens when you sell it.</p>
+  <div class="header-inner">
+    <div>
+      <div class="brand">Small Business Calculator Shop</div>
+      <div class="tagline">Know what it costs. Know what to charge. Know what you actually make.</div>
+    </div>
+    <button class="menu-btn" onclick="showPage('settings')">Settings</button>
   </div>
+
+  <nav id="nav">
+    <button data-page="home" onclick="showPage('home')">Home</button>
+    <button data-page="business" onclick="showPage('business')">My Business</button>
+    <button data-page="cost" onclick="showPage('cost')">Cost</button>
+    <button data-page="price" onclick="showPage('price')">Price</button>
+    <button data-page="sell" onclick="showPage('sell')">Sell</button>
+    <button data-page="plan" onclick="showPage('plan')">Plan</button>
+    <button data-page="reports" onclick="showPage('reports')">Reports</button>
+    <button data-page="help" onclick="showPage('help')">Help</button>
+  </nav>
 </header>
 
 <main>
 
-<div class="card input-section">
-  <h2>1. Your Product</h2>
-  <p class="help">Start with the basic information about this production batch.</p>
+<!-- ONBOARDING -->
 
-  <div class="grid">
-    <div>
-      <label for="productName">Product name</label>
-      <input id="productName" type="text" placeholder="Example: Lavender Body Oil">
-    </div>
+<section id="onboarding" class="page">
 
-    <div>
-      <label for="yield">How many finished products does this batch make?</label>
-      <input id="yield" type="number" min="0" step="1" placeholder="Example: 12">
-    </div>
-  </div>
-</div>
-
-<div class="card input-section">
-  <h2>2. Ingredients</h2>
-  <p class="help">
-    Enter what you bought, what you paid, and how much you use. We'll calculate the ingredient cost automatically.
-  </p>
-
-  <div id="ingredients"></div>
-
-  <div class="actions">
-    <button class="secondary" type="button" onclick="addIngredient()">+ Add Ingredient</button>
-  </div>
-</div>
-
-<div class="card input-section">
-  <h2>3. Packaging & Supplies</h2>
-  <p class="help">
-    Enter the quantity you bought and the total price you paid. Do not calculate the cost per item yourself.
-  </p>
-
-  <div id="packaging"></div>
-
-  <div class="actions">
-    <button class="secondary" type="button" onclick="addPackaging()">+ Add Packaging or Supply</button>
-  </div>
-</div>
-
-<div class="card input-section">
-  <h2>4. Labor & Other Costs</h2>
-  <p class="help">Tell us how long the batch takes and what you want to earn per hour.</p>
-
-  <div class="grid">
-    <div>
-      <label for="laborMinutes">Time to make this batch (minutes)</label>
-      <input id="laborMinutes" type="number" min="0" step="1" placeholder="Example: 90">
-    </div>
-
-    <div>
-      <label for="hourlyRate">Desired hourly rate ($)</label>
-      <input id="hourlyRate" type="number" min="0" step=".01" placeholder="Example: 20">
-    </div>
-
-    <div>
-      <label for="otherCosts">Other batch costs ($)</label>
-      <input id="otherCosts" type="number" min="0" step=".01" placeholder="Example: 5.00">
-    </div>
-
-    <div>
-      <label for="sellingPrice">Your selling price per product ($)</label>
-      <input id="sellingPrice" type="number" min="0" step=".01" placeholder="Optional">
-    </div>
-  </div>
-</div>
-
-<div class="card input-section">
-  <button class="primary calculate" type="button" onclick="calculate()">
-    Calculate My Product Cost
-  </button>
-
-  <div id="error" class="error"></div>
-</div>
-
-<div id="results" class="card results">
-  <h2>Your Results</h2>
-  <p id="resultProduct" class="help"></p>
-
-  <div class="result-grid">
-    <div class="result-box">
-      <span>Total batch cost</span>
-      <strong id="totalBatch">$0.00</strong>
-    </div>
-
-    <div class="result-box">
-      <span>Cost per finished product</span>
-      <strong id="unitCost">$0.00</strong>
-    </div>
-
-    <div class="result-box">
-      <span>Batch yield</span>
-      <strong id="resultYield">0</strong>
-    </div>
-  </div>
-
-  <div class="breakdown">
-    <h2>Cost Breakdown</h2>
-
-    <div class="row">
-      <span>Ingredients</span>
-      <strong id="ingredientTotal">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Packaging & supplies</span>
-      <strong id="packagingTotal">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Labor</span>
-      <strong id="laborTotal">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Other costs</span>
-      <strong id="otherTotal">$0.00</strong>
-    </div>
-  </div>
-
-  <div id="pricingResults" class="price-box" style="display:none">
-    <h2>At Your Selling Price</h2>
-
-    <div class="row">
-      <span>Selling price</span>
-      <strong id="salePrice">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Profit per product</span>
-      <strong id="profitUnit">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Profit margin</span>
-      <strong id="margin">0%</strong>
-    </div>
-
-    <div class="row">
-      <span>Potential profit if entire batch sells</span>
-      <strong id="batchProfit">$0.00</strong>
-    </div>
-  </div>
-
-  <div class="price-box">
-    <h2>Pricing Examples</h2>
-    <p class="small">
-      These are mathematical examples based on gross margin, not mandatory prices.
+  <div class="hero">
+    <h1>Let's get your business numbers working for you.</h1>
+    <p>
+      Tell us what you sell and what you know. We'll help you identify costs,
+      figure out what to charge, and understand whether you're actually making money.
     </p>
-
-    <div class="row">
-      <span>Price for 40% gross margin</span>
-      <strong id="margin40">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Price for 50% gross margin</span>
-      <strong id="margin50">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Price for 60% gross margin</span>
-      <strong id="margin60">$0.00</strong>
-    </div>
-
-    <div class="row">
-      <span>Price for 70% gross margin</span>
-      <strong id="margin70">$0.00</strong>
-    </div>
   </div>
 
-  <div id="warning" class="warning"></div>
+  <h2>What does your business sell?</h2>
+
+  <div class="grid">
+    <button class="card choice" onclick="selectBusinessType('products',this)">
+      <div class="choice-icon">📦</div>
+      <h3>Products</h3>
+      <p class="muted">Things you make, manufacture, assemble or resell.</p>
+    </button>
+
+    <button class="card choice" onclick="selectBusinessType('services',this)">
+      <div class="choice-icon">🧰</div>
+      <h3>Services</h3>
+      <p class="muted">Work you perform for customers or clients.</p>
+    </button>
+
+    <button class="card choice" onclick="selectBusinessType('food',this)">
+      <div class="choice-icon">🍽️</div>
+      <h3>Food & Beverage</h3>
+      <p class="muted">Baking, catering, restaurants, prepared foods and drinks.</p>
+    </button>
+
+    <button class="card choice" onclick="selectBusinessType('both',this)">
+      <div class="choice-icon">➕</div>
+      <h3>A Combination</h3>
+      <p class="muted">Your business sells more than one type.</p>
+    </button>
+  </div>
+
+  <h2 class="section-title">Where are you in your business?</h2>
+
+  <div class="grid">
+    <button class="card choice stage-choice" onclick="selectStage('starting',this)">
+      <h3>Starting My Business</h3>
+      <p class="muted">Give me more guidance and help me understand what to include.</p>
+    </button>
+
+    <button class="card choice stage-choice" onclick="selectStage('growing',this)">
+      <h3>Growing My Business</h3>
+      <p class="muted">Help me improve pricing, profitability and decisions.</p>
+    </button>
+
+    <button class="card choice stage-choice" onclick="selectStage('established',this)">
+      <h3>Established Business</h3>
+      <p class="muted">Give me streamlined entry, comparisons and deeper analysis.</p>
+    </button>
+  </div>
 
   <div class="actions">
-    <button class="primary" type="button" onclick="window.print()">Print / Save Report</button>
-    <button class="secondary" type="button" onclick="resetCalculator()">Start New Product</button>
+    <button class="btn btn-primary" onclick="finishOnboarding()">Continue</button>
   </div>
-</div>
+
+</section>
+
+
+<!-- HOME -->
+
+<section id="home" class="page">
+
+  <div class="hero">
+    <h1 id="welcomeTitle">Your business numbers, in one place.</h1>
+    <p id="homeIntro">
+      Start with the information you already know. We'll calculate the rest.
+    </p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="stat" id="savedItemsStat">0</div>
+      <div class="stat-label">Saved products / services</div>
+    </div>
+
+    <div class="card">
+      <div class="stat" id="materialsStat">0</div>
+      <div class="stat-label">Saved materials & supplies</div>
+    </div>
+
+    <div class="card">
+      <div class="stat" id="stageStat">—</div>
+      <div class="stat-label">Business stage</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">What do you need to figure out?</h2>
+
+  <div class="grid">
+
+    <button class="card choice" onclick="showPage('cost')">
+      <h3>What does this really cost me?</h3>
+      <p class="muted">Calculate materials, packaging, labor, fees and other costs.</p>
+    </button>
+
+    <button class="card choice" onclick="showPage('price')">
+      <h3>What should I charge?</h3>
+      <p class="muted">Build a price from your actual costs and profit goals.</p>
+    </button>
+
+    <button class="card choice" onclick="showPage('sell')">
+      <h3>Can I afford to say yes?</h3>
+      <p class="muted">Test discounts, wholesale offers, fees and customer budgets.</p>
+    </button>
+
+    <button class="card choice" onclick="showPage('plan')">
+      <h3>What happens if something changes?</h3>
+      <p class="muted">Run scenarios without changing your saved numbers.</p>
+    </button>
+
+  </div>
+
+  <div id="numbersCheck"></div>
+
+</section>
+
+
+<!-- BUSINESS -->
+
+<section id="business" class="page">
+
+  <div class="hero">
+    <h1>My Business</h1>
+    <p>Set up your business once so your information can be reused throughout the toolkit.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Business name</label>
+        <input id="businessName" placeholder="Your business name">
+      </div>
+
+      <div class="field">
+        <label>Currency</label>
+        <input id="currency" value="USD" placeholder="USD">
+      </div>
+
+      <div class="field">
+        <label>Business type</label>
+        <select id="businessType">
+          <option value="products">Products</option>
+          <option value="services">Services</option>
+          <option value="food">Food & Beverage</option>
+          <option value="both">Combination</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Business stage</label>
+        <select id="businessStage">
+          <option value="starting">Starting My Business</option>
+          <option value="growing">Growing My Business</option>
+          <option value="established">Established Business</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Default hourly pay for your time</label>
+        <input id="defaultLaborRate" type="number" min="0" step=".01" placeholder="25.00">
+      </div>
+
+      <div class="field">
+        <label>Default target profit margin (%)</label>
+        <input id="defaultMargin" type="number" min="0" max="99" step=".1" placeholder="50">
+      </div>
+
+      <div class="field full">
+        <label>Notes</label>
+        <textarea id="businessNotes" placeholder="Optional business notes"></textarea>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="saveBusiness()">Save Business Profile</button>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Materials & Supplies Library</h2>
+
+  <div class="card">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Material / supply name</label>
+        <input id="materialName" placeholder="Example: Shea butter">
+      </div>
+
+      <div class="field">
+        <label>Supplier</label>
+        <input id="materialSupplier" placeholder="Optional">
+      </div>
+
+      <div class="field">
+        <label>Quantity purchased</label>
+        <input id="materialQty" type="number" min="0" step=".001" placeholder="5">
+      </div>
+
+      <div class="field">
+        <label>Unit</label>
+        <select id="materialUnit">
+          <option>g</option>
+          <option>kg</option>
+          <option>oz</option>
+          <option>lb</option>
+          <option>mL</option>
+          <option>L</option>
+          <option>fl oz</option>
+          <option>tsp</option>
+          <option>tbsp</option>
+          <option>cup</option>
+          <option>count</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Total paid</label>
+        <input id="materialCost" type="number" min="0" step=".01" placeholder="25.00">
+      </div>
+
+      <div class="field">
+        <label>Inbound shipping / freight</label>
+        <input id="materialFreight" type="number" min="0" step=".01" placeholder="0.00">
+      </div>
+
+    </div>
+
+    <button class="btn btn-secondary" onclick="addMaterial()">+ Add to Library</button>
+
+    <div id="materialLibrary"></div>
+
+  </div>
+
+</section>
+
+
+<!-- COST -->
+
+<section id="cost" class="page">
+
+  <div class="hero">
+    <h1>What does this really cost me?</h1>
+    <p>
+      Enter the information you already know. The toolkit calculates the cost per unit,
+      batch or job.
+    </p>
+  </div>
+
+  <div class="card">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>What are you costing?</label>
+        <select id="costType" onchange="updateCostLanguage()">
+          <option value="product">Product</option>
+          <option value="service">Service / Job</option>
+          <option value="food">Recipe / Menu Item</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Name</label>
+        <input id="itemName" placeholder="Example: Lavender Soap">
+      </div>
+
+      <div class="field">
+        <label id="yieldLabel">How many finished units does this make?</label>
+        <input id="yieldQty" type="number" min=".001" step=".001" value="1">
+      </div>
+
+      <div class="field">
+        <label>Current selling price (optional)</label>
+        <input id="sellingPrice" type="number" min="0" step=".01">
+      </div>
+
+    </div>
+
+    <h3>Materials / Ingredients</h3>
+
+    <div class="help-box">
+      Enter what you bought and what you used. You do not need to calculate the cost per unit yourself.
+    </div>
+
+    <div id="ingredientRows"></div>
+
+    <button class="btn btn-secondary" onclick="addIngredientRow()">+ Add Material / Ingredient</button>
+
+    <h3 class="section-title">Packaging & Supplies</h3>
+
+    <div id="packagingRows"></div>
+
+    <button class="btn btn-secondary" onclick="addPackagingRow()">+ Add Packaging / Supply</button>
+
+    <h3 class="section-title">Your Time</h3>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Prep / setup minutes</label>
+        <input id="prepMinutes" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="field">
+        <label>Making / client / job minutes</label>
+        <input id="workMinutes" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="field">
+        <label>Cleanup / follow-up minutes</label>
+        <input id="cleanupMinutes" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="field">
+        <label>Travel / shopping / other minutes</label>
+        <input id="otherMinutes" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="field">
+        <label>What do you want to earn per hour?</label>
+        <input id="laborRate" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Other batch / job costs</label>
+        <input id="otherCosts" type="number" min="0" step=".01" value="0">
+      </div>
+
+    </div>
+
+    <h3 class="section-title">Cost Check — am I forgetting anything?</h3>
+
+    <div id="costChecklist" class="notice"></div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="calculateCost()">Calculate My Cost</button>
+      <button class="btn btn-secondary" onclick="resetCostForm()">Start New</button>
+    </div>
+
+  </div>
+
+  <div id="costResults" class="hidden"></div>
+
+</section>
+
+
+<!-- PRICE -->
+
+<section id="price" class="page">
+
+  <div class="hero">
+    <h1>What should I charge?</h1>
+    <p>Use a saved cost or enter a cost manually. We'll show what different prices mean.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Choose a saved item</label>
+        <select id="priceSavedItem" onchange="loadPriceItem()">
+          <option value="">Choose...</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Cost per unit / job</label>
+        <input id="priceCost" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Target profit margin (%)</label>
+        <input id="targetMargin" type="number" min="0" max="99" step=".1" value="50">
+      </div>
+
+      <div class="field">
+        <label>Proposed selling price (optional)</label>
+        <input id="proposedPrice" type="number" min="0" step=".01">
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="calculatePrice()">Show My Pricing</button>
+    </div>
+
+  </div>
+
+  <div id="priceResults"></div>
+
+</section>
+
+
+<!-- SELL -->
+
+<section id="sell" class="page">
+
+  <div class="hero">
+    <h1>Can I afford to say yes?</h1>
+    <p>Test an offer before you commit to it.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Discount Check</h3>
+
+      <div class="field">
+        <label>Regular price</label>
+        <input id="discountPrice" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Your cost</label>
+        <input id="discountCost" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Discount (%)</label>
+        <input id="discountPct" type="number" min="0" max="100" step=".1">
+      </div>
+
+      <button class="btn btn-primary" onclick="checkDiscount()">Can I Afford This Discount?</button>
+
+      <div id="discountResult"></div>
+    </div>
+
+
+    <div class="card">
+      <h3>Customer Budget Check</h3>
+
+      <div class="field">
+        <label>Customer's total budget</label>
+        <input id="customerBudget" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Your total cost to do the order / job</label>
+        <input id="budgetCost" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Minimum profit you want</label>
+        <input id="minimumProfit" type="number" min="0" step=".01" value="0">
+      </div>
+
+      <button class="btn btn-primary" onclick="checkBudget()">Can I Do It for Their Budget?</button>
+
+      <div id="budgetResult"></div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- PLAN -->
+
+<section id="plan" class="page">
+
+  <div class="hero">
+    <h1>What happens if something changes?</h1>
+    <p>Run a scenario without changing the numbers you've already saved.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Current unit / job cost</label>
+        <input id="scenarioCost" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Current selling price</label>
+        <input id="scenarioPrice" type="number" min="0" step=".01">
+      </div>
+
+      <div class="field">
+        <label>Cost change (%)</label>
+        <input id="scenarioCostChange" type="number" step=".1" value="0">
+      </div>
+
+      <div class="field">
+        <label>Price change (%)</label>
+        <input id="scenarioPriceChange" type="number" step=".1" value="0">
+      </div>
+
+      <div class="field">
+        <label>Units / jobs sold</label>
+        <input id="scenarioUnits" type="number" min="1" step="1" value="1">
+      </div>
+
+    </div>
+
+    <button class="btn btn-primary" onclick="runScenario()">Run Scenario</button>
+
+  </div>
+
+  <div id="scenarioResult"></div>
+
+</section>
+
+
+<!-- REPORTS -->
+
+<section id="reports" class="page">
+
+  <div class="hero">
+    <h1>Reports</h1>
+    <p>Review saved costing records and create a printable business report.</p>
+  </div>
+
+  <div id="reportList"></div>
+
+  <div class="actions no-print">
+    <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+  </div>
+
+</section>
+
+
+<!-- HELP -->
+
+<section id="help" class="page">
+
+  <div class="hero">
+    <h1>Help</h1>
+    <p>Business math in plain English.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Cost</h3>
+      <p>The money required to make a product or complete a job.</p>
+    </div>
+
+    <div class="card">
+      <h3>Profit</h3>
+      <p>Selling price minus the costs included in your calculation.</p>
+    </div>
+
+    <div class="card">
+      <h3>Profit Margin</h3>
+      <p>The percentage of the selling price left after the included costs.</p>
+    </div>
+
+    <div class="card">
+      <h3>Markup</h3>
+      <p>The percentage added to cost. Markup and margin are not the same thing.</p>
+    </div>
+
+    <div class="card">
+      <h3>Labor</h3>
+      <p>Your time is a business cost. Leaving labor blank means the calculation treats your time as costing $0.</p>
+    </div>
+
+    <div class="card">
+      <h3>Gross Profit vs Take-Home</h3>
+      <p>
+        Money remaining after the costs entered here is not automatically your final take-home income.
+        Taxes, business expenses and other obligations may still apply.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="card section-title">
+    <h3>Measurement Note</h3>
+    <p>
+      Weight and volume are different measurements. The toolkit will not pretend that ounces by weight
+      equal fluid ounces. Converting between weight and volume requires the ingredient's density.
+    </p>
+  </div>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section id="settings" class="page">
+
+  <div class="hero">
+    <h1>Settings & Data</h1>
+    <p>Your saved information stays in this browser on this device unless you export a backup.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Backup My Data</h3>
+      <p class="muted">Download a backup of your business profile, library and saved calculations.</p>
+      <button class="btn btn-primary" onclick="backupData()">Download Backup</button>
+    </div>
+
+    <div class="card">
+      <h3>Restore My Data</h3>
+      <p class="muted">Restore a backup created by this toolkit.</p>
+      <input type="file" id="restoreFile" accept=".json">
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="restoreData()">Restore Backup</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Reset Toolkit</h3>
+      <p class="muted">Delete the information saved by this toolkit on this browser.</p>
+      <button class="btn btn-danger" onclick="resetAllData()">Delete Saved Data</button>
+    </div>
+
+  </div>
+
+</section>
 
 </main>
 
 <footer>
-  Small Business Calculator Shop
+  Small Business Calculator Shop · Business decision tools for small business owners
 </footer>
 
+</div>
+
+
 <script>
-let ingredientCounter = 0;
-let packagingCounter = 0;
 
-const weightToGram = {
-  g: 1,
-  kg: 1000,
-  oz: 28.349523125,
-  lb: 453.59237
+const STORAGE_KEY = "sbcs_v1_data";
+
+let appData = {
+  onboardingComplete:false,
+  business:{
+    name:"",
+    currency:"USD",
+    type:"",
+    stage:"",
+    laborRate:0,
+    targetMargin:50,
+    notes:""
+  },
+  materials:[],
+  items:[]
 };
 
-const volumeToMl = {
-  ml: 1,
-  l: 1000,
-  floz: 29.5735295625
-};
+function loadData(){
+  const saved = localStorage.getItem(STORAGE_KEY);
 
-function money(value){
-  return "$" + Number(value || 0).toFixed(2);
+  if(saved){
+    try{
+      const parsed = JSON.parse(saved);
+      appData = Object.assign(appData,parsed);
+    }catch(e){}
+  }
 }
 
-function num(value){
-  const n = parseFloat(value);
-  return Number.isFinite(n) ? n : 0;
+function saveData(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(appData));
+  refreshUI();
+}
+
+function money(value){
+  const code = appData.business.currency || "USD";
+
+  try{
+    return new Intl.NumberFormat(undefined,{
+      style:"currency",
+      currency:code
+    }).format(Number(value)||0);
+  }catch(e){
+    return code+" "+(Number(value)||0).toFixed(2);
+  }
+}
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+  const page=document.getElementById(id);
+  if(page) page.classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===id);
+  });
+
+  if(id==="reports") renderReports();
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+let selectedBusinessType="";
+let selectedStage="";
+
+function selectBusinessType(type,el){
+  selectedBusinessType=type;
+
+  document.querySelectorAll("#onboarding .choice").forEach(x=>{
+    if(!x.classList.contains("stage-choice")) x.classList.remove("selected");
+  });
+
+  el.classList.add("selected");
+}
+
+function selectStage(stage,el){
+  selectedStage=stage;
+
+  document.querySelectorAll(".stage-choice").forEach(x=>x.classList.remove("selected"));
+  el.classList.add("selected");
+}
+
+function finishOnboarding(){
+
+  if(!selectedBusinessType || !selectedStage){
+    alert("Choose what your business sells and your business stage.");
+    return;
+  }
+
+  appData.business.type=selectedBusinessType;
+  appData.business.stage=selectedStage;
+  appData.onboardingComplete=true;
+
+  saveData();
+  populateBusinessForm();
+  showPage("business");
+}
+
+function saveBusiness(){
+
+  appData.business.name=document.getElementById("businessName").value.trim();
+  appData.business.currency=document.getElementById("currency").value.trim().toUpperCase() || "USD";
+  appData.business.type=document.getElementById("businessType").value;
+  appData.business.stage=document.getElementById("businessStage").value;
+  appData.business.laborRate=Number(document.getElementById("defaultLaborRate").value)||0;
+  appData.business.targetMargin=Number(document.getElementById("defaultMargin").value)||50;
+  appData.business.notes=document.getElementById("businessNotes").value.trim();
+
+  saveData();
+
+  document.getElementById("laborRate").value=appData.business.laborRate || "";
+  document.getElementById("targetMargin").value=appData.business.targetMargin || 50;
+
+  alert("Business profile saved.");
+}
+
+function populateBusinessForm(){
+
+  document.getElementById("businessName").value=appData.business.name||"";
+  document.getElementById("currency").value=appData.business.currency||"USD";
+  document.getElementById("businessType").value=appData.business.type||"products";
+  document.getElementById("businessStage").value=appData.business.stage||"starting";
+  document.getElementById("defaultLaborRate").value=appData.business.laborRate||"";
+  document.getElementById("defaultMargin").value=appData.business.targetMargin||50;
+  document.getElementById("businessNotes").value=appData.business.notes||"";
+
+  document.getElementById("laborRate").value=appData.business.laborRate||"";
+  document.getElementById("targetMargin").value=appData.business.targetMargin||50;
+}
+
+function addMaterial(){
+
+  const name=document.getElementById("materialName").value.trim();
+  const qty=Number(document.getElementById("materialQty").value);
+  const cost=Number(document.getElementById("materialCost").value);
+  const freight=Number(document.getElementById("materialFreight").value)||0;
+
+  if(!name || qty<=0){
+    alert("Enter a material name and quantity purchased.");
+    return;
+  }
+
+  appData.materials.push({
+    id:Date.now(),
+    name,
+    supplier:document.getElementById("materialSupplier").value.trim(),
+    qty,
+    unit:document.getElementById("materialUnit").value,
+    cost,
+    freight
+  });
+
+  ["materialName","materialSupplier","materialQty","materialCost","materialFreight"]
+    .forEach(id=>document.getElementById(id).value="");
+
+  saveData();
+}
+
+function deleteMaterial(id){
+  appData.materials=appData.materials.filter(m=>m.id!==id);
+  saveData();
+}
+
+function renderMaterials(){
+
+  const box=document.getElementById("materialLibrary");
+
+  if(!appData.materials.length){
+    box.innerHTML='<div class="empty">No materials saved yet.</div>';
+    return;
+  }
+
+  box.innerHTML=appData.materials.map(m=>{
+
+    const total=(Number(m.cost)||0)+(Number(m.freight)||0);
+    const per=total/Number(m.qty);
+
+    return `
+      <div class="library-item">
+        <div>
+          <strong>${escapeHTML(m.name)}</strong>
+          <div class="small muted">
+            ${escapeHTML(m.supplier||"No supplier saved")} ·
+            ${money(total)} for ${m.qty} ${escapeHTML(m.unit)}
+          </div>
+          <div class="small">
+            Calculated cost: <strong>${money(per)} per ${escapeHTML(m.unit)}</strong>
+          </div>
+        </div>
+
+        <button class="remove" onclick="deleteMaterial(${m.id})">Delete</button>
+      </div>
+    `;
+  }).join("");
+}
+
+function ingredientRowHTML(){
+
+  return `
+    <div class="item-row ingredient-row">
+
+      <div class="wide">
+        <label>Material / ingredient</label>
+        <input class="ing-name" placeholder="Example: Shea butter">
+      </div>
+
+      <div>
+        <label>Qty bought</label>
+        <input class="ing-buyqty" type="number" min="0" step=".001">
+      </div>
+
+      <div>
+        <label>Total paid</label>
+        <input class="ing-paid" type="number" min="0" step=".01">
+      </div>
+
+      <div>
+        <label>Qty used</label>
+        <input class="ing-used" type="number" min="0" step=".001">
+      </div>
+
+      <button class="remove" onclick="this.parentElement.remove()">×</button>
+
+    </div>
+  `;
+}
+
+function packagingRowHTML(){
+
+  return `
+    <div class="item-row packaging-row">
+
+      <div class="wide">
+        <label>Packaging / supply</label>
+        <input class="pkg-name" placeholder="Example: Bottles">
+      </div>
+
+      <div>
+        <label>Qty bought</label>
+        <input class="pkg-buyqty" type="number" min="0" step=".001">
+      </div>
+
+      <div>
+        <label>Total paid</label>
+        <input class="pkg-paid" type="number" min="0" step=".01">
+      </div>
+
+      <div>
+        <label>Qty used</label>
+        <input class="pkg-used" type="number" min="0" step=".001">
+      </div>
+
+      <button class="remove" onclick="this.parentElement.remove()">×</button>
+
+    </div>
+  `;
+}
+
+function addIngredientRow(){
+  document.getElementById("ingredientRows").insertAdjacentHTML("beforeend",ingredientRowHTML());
+}
+
+function addPackagingRow(){
+  document.getElementById("packagingRows").insertAdjacentHTML("beforeend",packagingRowHTML());
+}
+
+function rowCosts(selector,prefix){
+
+  let total=0;
+  let entries=[];
+
+  document.querySelectorAll(selector).forEach(row=>{
+
+    const name=row.querySelector("."+prefix+"-name").value.trim();
+    const bought=Number(row.querySelector("."+prefix+"-buyqty").value);
+    const paid=Number(row.querySelector("."+prefix+"-paid").value);
+    const used=Number(row.querySelector("."+prefix+"-used").value);
+
+    if(bought>0 && paid>=0 && used>=0){
+
+      const per=paid/bought;
+      const usedCost=per*used;
+
+      total+=usedCost;
+
+      if(name){
+        entries.push({
+          name,
+          bought,
+          paid,
+          used,
+          cost:usedCost
+        });
+      }
+    }
+  });
+
+  return {total,entries};
+}
+
+function updateCostLanguage(){
+
+  const type=document.getElementById("costType").value;
+  const label=document.getElementById("yieldLabel");
+
+  if(type==="service"){
+    label.textContent="How many jobs / appointments does this cover?";
+  }else if(type==="food"){
+    label.textContent="How many portions / plates does this recipe make?";
+  }else{
+    label.textContent="How many finished units does this make?";
+  }
+
+  renderCostChecklist();
+}
+
+function renderCostChecklist(){
+
+  const type=document.getElementById("costType").value;
+  let items=[];
+
+  if(type==="service"){
+    items=[
+      "Prep and setup time",
+      "Travel time and mileage",
+      "Client-facing time",
+      "Cleanup",
+      "Admin and follow-up",
+      "Payment processing fees",
+      "Equipment or software allowance"
+    ];
+  }else if(type==="food"){
+    items=[
+      "Every ingredient, including oils, seasonings and garnishes",
+      "Waste and spoilage",
+      "Packaging and disposables",
+      "Prep and cooking time",
+      "Utilities or kitchen overhead",
+      "Delivery or platform fees",
+      "Staff time"
+    ];
+  }else{
+    items=[
+      "All ingredients or components",
+      "Packaging and labels",
+      "Inbound shipping or freight",
+      "Waste or failed units",
+      "Your production time",
+      "Payment or marketplace fees",
+      "Business overhead"
+    ];
+  }
+
+  document.getElementById("costChecklist").innerHTML=
+    "<strong>Have you accounted for:</strong><br>"+
+    items.map(x=>"✓ "+x).join("<br>");
+}
+
+function calculateCost(){
+
+  const yieldQty=Number(document.getElementById("yieldQty").value);
+
+  if(yieldQty<=0){
+    alert("Enter a valid yield or number of jobs.");
+    return;
+  }
+
+  const ingredients=rowCosts(".ingredient-row","ing");
+  const packaging=rowCosts(".packaging-row","pkg");
+
+  const minutes=
+    (Number(document.getElementById("prepMinutes").value)||0)+
+    (Number(document.getElementById("workMinutes").value)||0)+
+    (Number(document.getElementById("cleanupMinutes").value)||0)+
+    (Number(document.getElementById("otherMinutes").value)||0);
+
+  const laborRate=Number(document.getElementById("laborRate").value)||0;
+  const labor=(minutes/60)*laborRate;
+  const other=Number(document.getElementById("otherCosts").value)||0;
+
+  const total=ingredients.total+packaging.total+labor+other;
+  const unit=total/yieldQty;
+
+  const selling=Number(document.getElementById("sellingPrice").value)||0;
+  const profit=selling ? selling-unit : 0;
+  const margin=selling ? (profit/selling)*100 : 0;
+
+  const item={
+    id:Date.now(),
+    date:new Date().toISOString(),
+    type:document.getElementById("costType").value,
+    name:document.getElementById("itemName").value.trim()||"Untitled Item",
+    yield:yieldQty,
+    ingredients:ingredients.entries,
+    packaging:packaging.entries,
+    materialsCost:ingredients.total,
+    packagingCost:packaging.total,
+    laborCost:labor,
+    laborMinutes:minutes,
+    laborRate,
+    otherCosts:other,
+    totalCost:total,
+    unitCost:unit,
+    sellingPrice:selling,
+    profit,
+    margin
+  };
+
+  showCostResult(item);
+
+  appData.items.push(item);
+  saveData();
+}
+
+function showCostResult(item){
+
+  let warning="";
+
+  if(item.laborRate===0 && item.laborMinutes>0){
+    warning=`
+      <div class="notice warning">
+        <strong>Labor is not included.</strong>
+        Your calculation currently treats your time as costing ${money(0)}.
+      </div>
+    `;
+  }
+
+  document.getElementById("costResults").classList.remove("hidden");
+
+  document.getElementById("costResults").innerHTML=`
+    <div class="card section-title">
+
+      <span class="badge">Saved</span>
+
+      <h2>${escapeHTML(item.name)}</h2>
+
+      ${warning}
+
+      <div class="grid">
+
+        <div>
+          <div class="result-big">${money(item.totalCost)}</div>
+          <div class="stat-label">Total batch / job cost</div>
+        </div>
+
+        <div>
+          <div class="result-big">${money(item.unitCost)}</div>
+          <div class="stat-label">Cost per unit / job / portion</div>
+        </div>
+
+        <div>
+          <div class="result-big">${money(item.laborCost)}</div>
+          <div class="stat-label">Value of your time included</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <p>
+        Materials: <strong>${money(item.materialsCost)}</strong><br>
+        Packaging: <strong>${money(item.packagingCost)}</strong><br>
+        Labor: <strong>${money(item.laborCost)}</strong><br>
+        Other costs: <strong>${money(item.otherCosts)}</strong>
+      </p>
+
+      ${
+        item.sellingPrice
+        ? `
+          <div class="notice">
+            At a selling price of <strong>${money(item.sellingPrice)}</strong>,
+            the amount remaining after the costs entered here is
+            <strong>${money(item.profit)}</strong> per unit/job,
+            a gross margin of <strong>${item.margin.toFixed(1)}%</strong>.
+          </div>
+        `
+        :""
+      }
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="useLastCostForPricing(${item.id})">
+          Price This
+        </button>
+
+        <button class="btn btn-secondary" onclick="showPage('reports')">
+          View Report
+        </button>
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById("costResults").scrollIntoView({behavior:"smooth"});
+}
+
+function resetCostForm(){
+
+  document.getElementById("itemName").value="";
+  document.getElementById("yieldQty").value=1;
+  document.getElementById("sellingPrice").value="";
+  document.getElementById("prepMinutes").value=0;
+  document.getElementById("workMinutes").value=0;
+  document.getElementById("cleanupMinutes").value=0;
+  document.getElementById("otherMinutes").value=0;
+  document.getElementById("otherCosts").value=0;
+
+  document.getElementById("ingredientRows").innerHTML="";
+  document.getElementById("packagingRows").innerHTML="";
+
+  addIngredientRow();
+  addPackagingRow();
+
+  document.getElementById("costResults").classList.add("hidden");
+}
+
+function renderPriceItems(){
+
+  const select=document.getElementById("priceSavedItem");
+
+  select.innerHTML='<option value="">Choose...</option>'+
+    appData.items.map(i=>
+      `<option value="${i.id}">${escapeHTML(i.name)}</option>`
+    ).join("");
+}
+
+function loadPriceItem(){
+
+  const id=Number(document.getElementById("priceSavedItem").value);
+  const item=appData.items.find(i=>i.id===id);
+
+  if(item){
+    document.getElementById("priceCost").value=item.unitCost.toFixed(2);
+
+    if(item.sellingPrice){
+      document.getElementById("proposedPrice").value=item.sellingPrice.toFixed(2);
+    }
+  }
+}
+
+function useLastCostForPricing(id){
+
+  showPage("price");
+
+  document.getElementById("priceSavedItem").value=id;
+  loadPriceItem();
+}
+
+function calculatePrice(){
+
+  const cost=Number(document.getElementById("priceCost").value);
+  const margin=Number(document.getElementById("targetMargin").value);
+  const proposed=Number(document.getElementById("proposedPrice").value);
+
+  if(cost<0 || margin>=100){
+    alert("Check the cost and target margin.");
+    return;
+  }
+
+  const targetPrice=cost/(1-(margin/100));
+
+  let proposedHTML="";
+
+  if(proposed>0){
+
+    const profit=proposed-cost;
+    const actualMargin=(profit/proposed)*100;
+
+    proposedHTML=`
+      <div class="notice">
+        At <strong>${money(proposed)}</strong>, you have
+        <strong>${money(profit)}</strong> remaining after this cost,
+        which is a <strong>${actualMargin.toFixed(1)}% gross margin</strong>.
+      </div>
+    `;
+  }
+
+  document.getElementById("priceResults").innerHTML=`
+    <div class="card section-title">
+
+      <div class="question">Price needed for a ${margin.toFixed(1)}% gross margin</div>
+      <div class="result-big">${money(targetPrice)}</div>
+
+      ${proposedHTML}
+
+      <div class="help-box">
+        This is based only on the costs included in your costing record.
+        It does not automatically represent final owner take-home income.
+      </div>
+
+    </div>
+  `;
+}
+
+function checkDiscount(){
+
+  const price=Number(document.getElementById("discountPrice").value);
+  const cost=Number(document.getElementById("discountCost").value);
+  const pct=Number(document.getElementById("discountPct").value);
+
+  const salePrice=price*(1-pct/100);
+  const profit=salePrice-cost;
+  const margin=salePrice ? profit/salePrice*100 : 0;
+
+  const cls=profit>=0 ? "notice" : "notice danger";
+
+  document.getElementById("discountResult").innerHTML=`
+    <div class="${cls}">
+      Sale price: <strong>${money(salePrice)}</strong><br>
+      Amount remaining after cost: <strong>${money(profit)}</strong><br>
+      Gross margin: <strong>${margin.toFixed(1)}%</strong>
+    </div>
+  `;
+}
+
+function checkBudget(){
+
+  const budget=Number(document.getElementById("customerBudget").value);
+  const cost=Number(document.getElementById("budgetCost").value);
+  const minimum=Number(document.getElementById("minimumProfit").value);
+
+  const remaining=budget-cost;
+  const works=remaining>=minimum;
+
+  document.getElementById("budgetResult").innerHTML=`
+    <div class="notice ${works?"":"danger"}">
+      <strong>${works ? "This budget can meet your minimum." : "This budget does not meet your minimum."}</strong><br><br>
+      Customer budget: ${money(budget)}<br>
+      Your cost: ${money(cost)}<br>
+      Amount remaining: <strong>${money(remaining)}</strong><br>
+      Minimum profit wanted: ${money(minimum)}
+    </div>
+  `;
+}
+
+function runScenario(){
+
+  const cost=Number(document.getElementById("scenarioCost").value);
+  const price=Number(document.getElementById("scenarioPrice").value);
+  const costChange=Number(document.getElementById("scenarioCostChange").value);
+  const priceChange=Number(document.getElementById("scenarioPriceChange").value);
+  const units=Number(document.getElementById("scenarioUnits").value)||1;
+
+  const newCost=cost*(1+costChange/100);
+  const newPrice=price*(1+priceChange/100);
+
+  const currentProfit=(price-cost)*units;
+  const newProfit=(newPrice-newCost)*units;
+
+  document.getElementById("scenarioResult").innerHTML=`
+    <div class="card section-title">
+
+      <h2>Current vs Scenario</h2>
+
+      <div class="grid">
+
+        <div>
+          <div class="stat">${money(cost)}</div>
+          <div class="stat-label">Current cost</div>
+        </div>
+
+        <div>
+          <div class="stat">${money(newCost)}</div>
+          <div class="stat-label">Scenario cost</div>
+        </div>
+
+        <div>
+          <div class="stat">${money(price)}</div>
+          <div class="stat-label">Current price</div>
+        </div>
+
+        <div>
+          <div class="stat">${money(newPrice)}</div>
+          <div class="stat-label">Scenario price</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      Current amount remaining for ${units}:
+      <strong>${money(currentProfit)}</strong><br>
+
+      Scenario amount remaining for ${units}:
+      <strong>${money(newProfit)}</strong><br><br>
+
+      Difference:
+      <strong>${money(newProfit-currentProfit)}</strong>
+
+      <div class="help-box">
+        Running this scenario did not change your saved product or service.
+      </div>
+
+    </div>
+  `;
+}
+
+function renderReports(){
+
+  const box=document.getElementById("reportList");
+
+  if(!appData.items.length){
+    box.innerHTML='<div class="card empty">No saved costing reports yet.</div>';
+    return;
+  }
+
+  box.innerHTML=appData.items.slice().reverse().map(item=>`
+    <div class="card" style="margin-bottom:15px">
+
+      <div class="small muted">
+        ${new Date(item.date).toLocaleDateString()}
+      </div>
+
+      <h2>${escapeHTML(item.name)}</h2>
+
+      <p>
+        Type: ${escapeHTML(item.type)}<br>
+        Yield: ${item.yield}<br>
+        Materials: ${money(item.materialsCost)}<br>
+        Packaging: ${money(item.packagingCost)}<br>
+        Labor: ${money(item.laborCost)}<br>
+        Other: ${money(item.otherCosts)}
+      </p>
+
+      <hr>
+
+      <div class="grid">
+        <div>
+          <div class="stat">${money(item.totalCost)}</div>
+          <div class="stat-label">Total cost</div>
+        </div>
+
+        <div>
+          <div class="stat">${money(item.unitCost)}</div>
+          <div class="stat-label">Cost per unit / job</div>
+        </div>
+      </div>
+
+      ${
+        item.sellingPrice
+        ? `<p>
+             Selling price: <strong>${money(item.sellingPrice)}</strong><br>
+             Amount remaining: <strong>${money(item.profit)}</strong><br>
+             Gross margin: <strong>${item.margin.toFixed(1)}%</strong>
+           </p>`
+        :""
+      }
+
+    </div>
+  `).join("");
+}
+
+function refreshUI(){
+
+  renderMaterials();
+  renderPriceItems();
+
+  document.getElementById("savedItemsStat").textContent=appData.items.length;
+  document.getElementById("materialsStat").textContent=appData.materials.length;
+
+  const stageNames={
+    starting:"Starting",
+    growing:"Growing",
+    established:"Established"
+  };
+
+  document.getElementById("stageStat").textContent=
+    stageNames[appData.business.stage]||"—";
+
+  const name=appData.business.name;
+
+  document.getElementById("welcomeTitle").textContent=
+    name ? `${name}: know your numbers.` : "Your business numbers, in one place.";
+
+  renderNumbersCheck();
+}
+
+function renderNumbersCheck(){
+
+  const box=document.getElementById("numbersCheck");
+
+  if(!appData.items.length){
+    box.innerHTML=`
+      <div class="card section-title">
+        <h2>Your Numbers Check</h2>
+        <p class="muted">
+          Add your first product, service, recipe or menu item and we'll start checking your numbers.
+        </p>
+        <button class="btn btn-primary" onclick="showPage('cost')">
+          Calculate My First Cost
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  const issues=appData.items.filter(i=>
+    i.sellingPrice && (i.margin<20 || (i.laborMinutes>0 && i.laborRate===0))
+  );
+
+  if(!issues.length){
+    box.innerHTML=`
+      <div class="card section-title">
+        <h2>Your Numbers Check</h2>
+        <div class="notice">
+          No obvious pricing warnings in your saved costing records.
+        </div>
+      </div>
+    `;
+  }else{
+    box.innerHTML=`
+      <div class="card section-title">
+        <h2>Your Numbers Check</h2>
+        <div class="notice warning">
+          ${issues.length} saved item${issues.length===1?" needs":"s need"} attention.
+          Review low margins or calculations that may not include your time.
+        </div>
+      </div>
+    `;
+  }
+}
+
+function backupData(){
+
+  const blob=new Blob(
+    [JSON.stringify(appData,null,2)],
+    {type:"application/json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download="small-business-calculator-shop-backup.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function restoreData(){
+
+  const input=document.getElementById("restoreFile");
+
+  if(!input.files.length){
+    alert("Choose a backup file first.");
+    return;
+  }
+
+  const reader=new FileReader();
+
+  reader.onload=function(){
+
+    try{
+      const restored=JSON.parse(reader.result);
+
+      if(!restored.business || !Array.isArray(restored.items)){
+        throw new Error();
+      }
+
+      appData=restored;
+      saveData();
+      populateBusinessForm();
+
+      alert("Backup restored.");
+      showPage("home");
+
+    }catch(e){
+      alert("That file is not a valid toolkit backup.");
+    }
+  };
+
+  reader.readAsText(input.files[0]);
+}
+
+function resetAllData(){
+
+  const confirmed=confirm(
+    "Delete all business information saved by this toolkit on this browser?"
+  );
+
+  if(!confirmed) return;
+
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
 }
 
 function escapeHTML(value){
-  return String(value || "")
+
+  return String(value??"")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
@@ -522,304 +1973,26 @@ function escapeHTML(value){
     .replaceAll("'","&#039;");
 }
 
-function unitDimension(unit){
-  if(weightToGram[unit]) return "weight";
-  if(volumeToMl[unit]) return "volume";
-  return null;
-}
+function initialize(){
 
-function convert(value, from, to){
-  const fromDim = unitDimension(from);
-  const toDim = unitDimension(to);
+  loadData();
 
-  if(!fromDim || !toDim || fromDim !== toDim){
-    return null;
-  }
+  addIngredientRow();
+  addPackagingRow();
 
-  if(fromDim === "weight"){
-    return value * weightToGram[from] / weightToGram[to];
-  }
+  populateBusinessForm();
+  renderCostChecklist();
+  refreshUI();
 
-  return value * volumeToMl[from] / volumeToMl[to];
-}
-
-function unitOptions(){
-  return `
-    <option value="g">grams (g)</option>
-    <option value="kg">kilograms (kg)</option>
-    <option value="oz">ounces by weight (oz)</option>
-    <option value="lb">pounds (lb)</option>
-    <option value="ml">milliliters (mL)</option>
-    <option value="l">liters (L)</option>
-    <option value="floz">fluid ounces (fl oz)</option>
-  `;
-}
-
-function addIngredient(){
-  ingredientCounter++;
-
-  const div = document.createElement("div");
-  div.className = "item ingredient";
-  div.innerHTML = `
-    <div class="item-head">
-      <strong>Ingredient ${ingredientCounter}</strong>
-      <button class="remove" type="button" onclick="this.closest('.item').remove()">Remove</button>
-    </div>
-
-    <div class="grid">
-      <div>
-        <label>Ingredient name</label>
-        <input class="ing-name" type="text" placeholder="Example: Jojoba Oil">
-      </div>
-
-      <div>
-        <label>Total price paid ($)</label>
-        <input class="ing-price" type="number" min="0" step=".01" placeholder="Example: 12.00">
-      </div>
-
-      <div>
-        <label>Quantity purchased</label>
-        <input class="ing-purchase-qty" type="number" min="0" step=".0001" placeholder="Example: 8">
-      </div>
-
-      <div>
-        <label>Purchase unit</label>
-        <select class="ing-purchase-unit">${unitOptions()}</select>
-      </div>
-
-      <div>
-        <label>Amount used in this batch</label>
-        <input class="ing-used-qty" type="number" min="0" step=".0001" placeholder="Example: 2">
-      </div>
-
-      <div>
-        <label>Unit used</label>
-        <select class="ing-used-unit">${unitOptions()}</select>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("ingredients").appendChild(div);
-}
-
-function addPackaging(){
-  packagingCounter++;
-
-  const div = document.createElement("div");
-  div.className = "item package";
-  div.innerHTML = `
-    <div class="item-head">
-      <strong>Packaging / Supply ${packagingCounter}</strong>
-      <button class="remove" type="button" onclick="this.closest('.item').remove()">Remove</button>
-    </div>
-
-    <div class="grid">
-      <div>
-        <label>Item name</label>
-        <input class="pkg-name" type="text" placeholder="Example: 2 oz bottle">
-      </div>
-
-      <div>
-        <label>Quantity purchased</label>
-        <input class="pkg-purchased" type="number" min="0" step=".01" placeholder="Example: 50">
-      </div>
-
-      <div>
-        <label>Total price paid ($)</label>
-        <input class="pkg-price" type="number" min="0" step=".01" placeholder="Example: 75.00">
-      </div>
-
-      <div>
-        <label>How many are used for this batch?</label>
-        <input class="pkg-used" type="number" min="0" step=".01" placeholder="Example: 12">
-      </div>
-    </div>
-  `;
-
-  document.getElementById("packaging").appendChild(div);
-}
-
-function calculateIngredients(){
-  let total = 0;
-  let invalid = [];
-
-  document.querySelectorAll(".ingredient").forEach((item,index)=>{
-    const name = item.querySelector(".ing-name").value || `Ingredient ${index+1}`;
-    const price = num(item.querySelector(".ing-price").value);
-    const purchaseQty = num(item.querySelector(".ing-purchase-qty").value);
-    const purchaseUnit = item.querySelector(".ing-purchase-unit").value;
-    const usedQty = num(item.querySelector(".ing-used-qty").value);
-    const usedUnit = item.querySelector(".ing-used-unit").value;
-
-    if(price === 0 && purchaseQty === 0 && usedQty === 0) return;
-
-    if(purchaseQty <= 0){
-      invalid.push(`${name}: enter the quantity purchased.`);
-      return;
-    }
-
-    const usedInPurchaseUnit = convert(usedQty,usedUnit,purchaseUnit);
-
-    if(usedInPurchaseUnit === null){
-      invalid.push(
-        `${name}: weight and volume cannot be converted without the ingredient's density. Use compatible units.`
-      );
-      return;
-    }
-
-    const costPerPurchaseUnit = price / purchaseQty;
-    total += costPerPurchaseUnit * usedInPurchaseUnit;
-  });
-
-  return {total,invalid};
-}
-
-function calculatePackaging(){
-  let total = 0;
-  let invalid = [];
-
-  document.querySelectorAll(".package").forEach((item,index)=>{
-    const name = item.querySelector(".pkg-name").value || `Packaging item ${index+1}`;
-    const purchased = num(item.querySelector(".pkg-purchased").value);
-    const price = num(item.querySelector(".pkg-price").value);
-    const used = num(item.querySelector(".pkg-used").value);
-
-    if(purchased === 0 && price === 0 && used === 0) return;
-
-    if(purchased <= 0){
-      invalid.push(`${name}: enter the quantity purchased.`);
-      return;
-    }
-
-    const costEach = price / purchased;
-    total += costEach * used;
-  });
-
-  return {total,invalid};
-}
-
-function priceForMargin(cost,margin){
-  if(cost <= 0 || margin >= 1) return 0;
-  return cost / (1-margin);
-}
-
-function calculate(){
-  const error = document.getElementById("error");
-  error.style.display = "none";
-  error.innerHTML = "";
-
-  const productName = document.getElementById("productName").value.trim();
-  const yieldQty = num(document.getElementById("yield").value);
-
-  if(yieldQty <= 0){
-    error.textContent = "Enter how many finished products this batch makes.";
-    error.style.display = "block";
-    return;
-  }
-
-  const ingredients = calculateIngredients();
-  const packaging = calculatePackaging();
-
-  const problems = [...ingredients.invalid,...packaging.invalid];
-
-  if(problems.length){
-    error.innerHTML = problems.map(p => escapeHTML(p)).join("<br>");
-    error.style.display = "block";
-    return;
-  }
-
-  const minutes = num(document.getElementById("laborMinutes").value);
-  const hourly = num(document.getElementById("hourlyRate").value);
-  const labor = (minutes / 60) * hourly;
-
-  const other = num(document.getElementById("otherCosts").value);
-
-  const batchCost =
-    ingredients.total +
-    packaging.total +
-    labor +
-    other;
-
-  const unitCost = batchCost / yieldQty;
-
-  document.getElementById("resultProduct").textContent =
-    productName ? productName : "Product Cost Report";
-
-  document.getElementById("totalBatch").textContent = money(batchCost);
-  document.getElementById("unitCost").textContent = money(unitCost);
-  document.getElementById("resultYield").textContent = yieldQty;
-
-  document.getElementById("ingredientTotal").textContent = money(ingredients.total);
-  document.getElementById("packagingTotal").textContent = money(packaging.total);
-  document.getElementById("laborTotal").textContent = money(labor);
-  document.getElementById("otherTotal").textContent = money(other);
-
-  document.getElementById("margin40").textContent = money(priceForMargin(unitCost,.40));
-  document.getElementById("margin50").textContent = money(priceForMargin(unitCost,.50));
-  document.getElementById("margin60").textContent = money(priceForMargin(unitCost,.60));
-  document.getElementById("margin70").textContent = money(priceForMargin(unitCost,.70));
-
-  const sellingPrice = num(document.getElementById("sellingPrice").value);
-  const pricingBox = document.getElementById("pricingResults");
-  const warning = document.getElementById("warning");
-
-  warning.style.display = "none";
-
-  if(sellingPrice > 0){
-    const profit = sellingPrice - unitCost;
-    const margin = sellingPrice > 0 ? (profit / sellingPrice) * 100 : 0;
-    const batchProfit = profit * yieldQty;
-
-    document.getElementById("salePrice").textContent = money(sellingPrice);
-    document.getElementById("profitUnit").textContent = money(profit);
-    document.getElementById("margin").textContent = margin.toFixed(1) + "%";
-    document.getElementById("batchProfit").textContent = money(batchProfit);
-
-    pricingBox.style.display = "block";
-
-    if(profit < 0){
-      warning.textContent =
-        "Warning: At this selling price, you would lose money on each product.";
-      warning.style.display = "block";
-    }else if(margin < 30){
-      warning.textContent =
-        "Your calculated gross margin is below 30%. Check whether this leaves enough room for selling fees, discounts, taxes, overhead and unexpected costs.";
-      warning.style.display = "block";
-    }
+  if(appData.onboardingComplete){
+    showPage("home");
   }else{
-    pricingBox.style.display = "none";
+    showPage("onboarding");
   }
-
-  document.getElementById("results").style.display = "block";
-  document.getElementById("results").scrollIntoView({behavior:"smooth"});
 }
 
-function resetCalculator(){
-  if(!confirm("Start a new product? This will clear the current entries.")) return;
+initialize();
 
-  document.getElementById("productName").value = "";
-  document.getElementById("yield").value = "";
-  document.getElementById("laborMinutes").value = "";
-  document.getElementById("hourlyRate").value = "";
-  document.getElementById("otherCosts").value = "";
-  document.getElementById("sellingPrice").value = "";
-
-  document.getElementById("ingredients").innerHTML = "";
-  document.getElementById("packaging").innerHTML = "";
-
-  ingredientCounter = 0;
-  packagingCounter = 0;
-
-  addIngredient();
-  addPackaging();
-
-  document.getElementById("results").style.display = "none";
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-/* Start with one ingredient and one packaging item */
-addIngredient();
-addPackaging();
 </script>
 
 </body>
