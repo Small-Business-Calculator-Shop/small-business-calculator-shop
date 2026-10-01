@@ -16,20 +16,20 @@ p=H.planProduction({orderQty:12,finishedOnHand:5,keepInStock:5,sellableYield:10}
 eq({required:p.unitsRequired,batches:p.batchesRequired,produced:p.unitsProduced,excess:p.excessAfterRequirements,ending:p.finishedAfterOrder},{required:12,batches:2,produced:20,excess:8,ending:13},'excess from final batch must remain finished inventory');
 
 // Physical material units are preserved; no conversion occurs here.
-let needs=H.purchaseNeedForWholeBatches([{name:'Oil',unit:'mL',usedPerBatch:250,onHand:400}],3)[0];
-eq(needs,{name:'Oil',unit:'mL',usedPerBatch:250,onHand:400,required:750,short:350},'mL must remain mL');
-needs=H.purchaseNeedForWholeBatches([{name:'Wax',unit:'g',usedPerBatch:125,onHand:200}],2)[0];
-eq(needs,{name:'Wax',unit:'g',usedPerBatch:125,onHand:200,required:250,short:50},'g must remain g');
+let needs=H.purchaseNeedForWholeBatches([{name:'Oil',unit:'mL',usedPerBatch:250.5,onHand:400.25}],3)[0];
+eq(needs,{name:'Oil',unit:'mL',usedPerBatch:250.5,onHand:400.25,required:751.5,short:351.25},'mL and decimal quantities must remain unchanged');
+needs=H.purchaseNeedForWholeBatches([{name:'Wax',unit:'g',usedPerBatch:125.25,onHand:200.5}],2)[0];
+eq(needs,{name:'Wax',unit:'g',usedPerBatch:125.25,onHand:200.5,required:250.5,short:50},'g and decimal quantities must remain unchanged');
 
 // Payment delay affects the answer when new cash is tied up.
 eq(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:420,newCashNeeded:185,paymentDays:30,physicalShortage:false}).status,'MAYBE','Net 30 plus new cash should surface timing exposure');
 eq(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:420,newCashNeeded:0,paymentDays:30,physicalShortage:false}).status,'YES','delay alone should not change economics when no new cash is required');
 eq(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:-70,newCashNeeded:0,paymentDays:0,physicalShortage:false}).status,'NO','loss-making order must be NO');
 
-// Currency rounding is optional and display-only.
-eq(H.currencyDisplay(185.49,{round:false,symbol:'$'}),'$185.49');
-eq(H.currencyDisplay(185.49,{round:true,symbol:'$'}),'$185');
-eq(H.currencyDisplay(185.50,{round:true,symbol:'$'}),'$186');
-const precise=185.49; H.currencyDisplay(precise,{round:true,symbol:'$'}); eq(precise,185.49,'formatting must not mutate calculation value');
+// Currency is shown as calculated. There is no rounding preference or rounding path.
+eq(H.currencyDisplay(185.49,{symbol:'$'}),'$185.49');
+eq(H.currencyDisplay(185.5,{symbol:'$'}),'$185.5');
+eq(H.currencyDisplay(185,{symbol:'$'}),'$185');
+const precise=185.49; H.currencyDisplay(precise,{symbol:'$'}); eq(precise,185.49,'formatting must not mutate calculation value');
 
 console.log('Maker Calculator launch-hardening engine tests passed.');
