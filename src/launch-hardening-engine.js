@@ -1,7 +1,7 @@
 /* Maker Calculator™ launch-hardening engine
  * Conservative rules: preserve measurement units, plan whole batches,
  * restore Keep in Stock, retain excess production as finished inventory,
- * and keep currency rounding as display-only.
+ * and preserve currency values as calculated.
  */
 (function(root){
   'use strict';
@@ -42,10 +42,9 @@
     return {status:'YES',reason:'Based on the numbers entered, the order covers its entered costs while preserving Keep in Stock.'};
   }
   function currencyDisplay(value,options){
-    const opts=options||{}, round=!!opts.round, decimals=round?0:Math.max(0,Math.min(6,Number.isInteger(opts.decimals)?opts.decimals:2)), symbol=typeof opts.symbol==='string'?opts.symbol:'$', shown=round?Math.round(num(value)):num(value);
-    return symbol+shown.toLocaleString(undefined,{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+    const opts=options||{}, symbol=typeof opts.symbol==='string'?opts.symbol:'$', shown=num(value);
+    return symbol+shown.toLocaleString(undefined,{maximumFractionDigits:20,useGrouping:true});
   }
-  // Currency rounding is display-only. Never feed a formatted/rounded value back into math.
   root.MakerHardening={planProduction,purchaseNeedForWholeBatches,orderDecision,currencyDisplay};
   if(typeof module!=='undefined'&&module.exports) module.exports=root.MakerHardening;
 })(typeof globalThis!=='undefined'?globalThis:this);
