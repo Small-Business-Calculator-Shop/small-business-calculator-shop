@@ -26,10 +26,21 @@ eq(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:420,newCashNeeded:185
 eq(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:420,newCashNeeded:0,paymentDays:30,physicalShortage:false}).status,'YES','delay alone should not change economics when no new cash is required');
 eq(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:-70,newCashNeeded:0,paymentDays:0,physicalShortage:false}).status,'NO','loss-making order must be NO');
 
-// Currency is shown as calculated. There is no rounding preference or rounding path.
+// Currency retains calculated precision unless optional display-only rounding is requested.
 eq(H.currencyDisplay(185.49,{symbol:'$'}),'$185.49');
 eq(H.currencyDisplay(185.5,{symbol:'$'}),'$185.5');
 eq(H.currencyDisplay(185,{symbol:'$'}),'$185');
-const precise=185.49; H.currencyDisplay(precise,{symbol:'$'}); eq(precise,185.49,'formatting must not mutate calculation value');
+eq(H.currencyDisplay(185.49,{symbol:' eq(precise,185.49,'formatting must not mutate calculation value');
+
+console.log('Maker Calculator launch-hardening engine tests passed.');
+,round:true}),'$185');
+eq(H.currencyDisplay(185.5,{symbol:' eq(precise,185.49,'formatting must not mutate calculation value');
+
+console.log('Maker Calculator launch-hardening engine tests passed.');
+,round:true}),'$186');
+const precise=185.49; H.currencyDisplay(precise,{symbol:' eq(precise,185.49,'formatting must not mutate calculation value');
+
+console.log('Maker Calculator launch-hardening engine tests passed.');
+,round:true}); eq(precise,185.49,'formatting must not mutate calculation value');
 
 console.log('Maker Calculator launch-hardening engine tests passed.');
