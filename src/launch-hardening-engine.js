@@ -42,14 +42,9 @@
     return {status:'YES',reason:'Based on the numbers entered, the order covers its entered costs while preserving Keep in Stock.'};
   }
   function currencyDisplay(value,options){
-    const opts=options||{}, symbol=typeof opts.symbol==='string'?opts.symbol:'
-    return symbol+shown.toLocaleString(undefined,{maximumFractionDigits:20,useGrouping:true});
-  }
-  root.MakerHardening={planProduction,purchaseNeedForWholeBatches,orderDecision,currencyDisplay};
-  if(typeof module!=='undefined'&&module.exports) module.exports=root.MakerHardening;
-})(typeof globalThis!=='undefined'?globalThis:this);
-, shown=opts.round?Math.round(num(value)):num(value);
-    return symbol+shown.toLocaleString(undefined,{maximumFractionDigits:20,useGrouping:true});
+    const opts=options||{}, symbol=typeof opts.symbol==='string'?opts.symbol:'$';
+    const shown=opts.round?Math.round(num(value)):num(value);
+    return symbol+shown.toLocaleString('en-US',{minimumFractionDigits:opts.round?0:2,maximumFractionDigits:opts.round?0:2,useGrouping:true});
   }
   root.MakerHardening={planProduction,purchaseNeedForWholeBatches,orderDecision,currencyDisplay};
   if(typeof module!=='undefined'&&module.exports) module.exports=root.MakerHardening;
