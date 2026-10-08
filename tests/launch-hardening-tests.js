@@ -44,7 +44,30 @@ test('Currency rounding is optional and display-only',()=>{
   const precise=185.49;
   assert.equal(H.currencyDisplay(precise,{round:false,symbol:'$'}),'$185.49');
   assert.equal(H.currencyDisplay(precise,{round:true,symbol:'$'}),'$185');
-  assert.equal(H.currencyDisplay(185.50,{round:true,symbol:'$'}),'$186');
+  assert.equal(H.currencyDisplay(185.50,{round:false,symbol:'
+  assert.equal(precise,185.49);
+});
+
+let passed=0;
+for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
+console.log(`\n${passed}/${tests.length} tests passed`);
+}),'$185.50');
+  assert.equal(H.currencyDisplay(185,{round:false,symbol:'
+  assert.equal(precise,185.49);
+});
+
+let passed=0;
+for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
+console.log(`\n${passed}/${tests.length} tests passed`);
+}),'$185.00');
+  assert.equal(H.currencyDisplay(185.50,{round:true,symbol:'
+  assert.equal(precise,185.49);
+});
+
+let passed=0;
+for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
+console.log(`\n${passed}/${tests.length} tests passed`);
+}),'$186');
   assert.equal(precise,185.49);
 });
 
