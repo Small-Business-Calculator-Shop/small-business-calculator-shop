@@ -40,37 +40,15 @@ test('Heavy up-front cash need is MAYBE',()=>assert.equal(H.orderDecision({order
 test('Net 30 plus new cash exposure is MAYBE',()=>assert.equal(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:420,newCashNeeded:185,paymentDays:30}).status,'MAYBE'));
 test('Healthy immediate-pay order can be YES',()=>assert.equal(H.orderDecision({orderQty:100,orderSales:1400,orderLeft:420,newCashNeeded:185,paymentDays:0}).status,'YES'));
 
-test('Currency rounding is optional and display-only',()=>{
+test('Currency defaults to two decimals with optional whole-number rounding',()=>{
   const precise=185.49;
-  assert.equal(H.currencyDisplay(precise,{round:false,symbol:'$'}),'$185.49');
+  assert.equal(H.currencyDisplay(precise,{symbol:'$'}),'$185.49');
+  assert.equal(H.currencyDisplay(185.5,{symbol:'$'}),'$185.50');
+  assert.equal(H.currencyDisplay(185,{symbol:'$'}),'$185.00');
   assert.equal(H.currencyDisplay(precise,{round:true,symbol:'$'}),'$185');
-  assert.equal(H.currencyDisplay(185.50,{round:false,symbol:'
+  assert.equal(H.currencyDisplay(185.5,{round:true,symbol:'$'}),'$186');
   assert.equal(precise,185.49);
 });
-
-let passed=0;
-for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
-console.log(`\n${passed}/${tests.length} tests passed`);
-}),'$185.50');
-  assert.equal(H.currencyDisplay(185,{round:false,symbol:'
-  assert.equal(precise,185.49);
-});
-
-let passed=0;
-for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
-console.log(`\n${passed}/${tests.length} tests passed`);
-}),'$185.00');
-  assert.equal(H.currencyDisplay(185.50,{round:true,symbol:'
-  assert.equal(precise,185.49);
-});
-
-let passed=0;
-for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
-console.log(`\n${passed}/${tests.length} tests passed`);
-}),'$186');
-  assert.equal(precise,185.49);
-});
-
 let passed=0;
 for(const [name,fn] of tests){try{fn();console.log('PASS',name);passed++;}catch(e){console.error('FAIL',name);console.error(e.stack||e.message);process.exitCode=1;}}
 console.log(`\n${passed}/${tests.length} tests passed`);
