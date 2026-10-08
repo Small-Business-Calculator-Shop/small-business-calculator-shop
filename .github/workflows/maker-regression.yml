@@ -17,6 +17,9 @@ jobs:
           node --check src/launch-hardening-engine.js
           node --check tests/launch-hardening-tests.js
           node --check tests/launch-hardening-engine-tests.js
+      - name: Check browser inline JavaScript syntax
+        run: |
+          node -e "const fs=require('fs');const html=fs.readFileSync('index.html','utf8');const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)].map(m=>m[1]).filter(s=>s.trim());if(!scripts.length)throw Error('No inline script found');scripts.forEach((s,i)=>{new Function(s);console.log('Inline script '+(i+1)+' parses')})"
       - name: Run primary regression suite
         run: node tests/launch-hardening-tests.js
       - name: Run engine regression suite
