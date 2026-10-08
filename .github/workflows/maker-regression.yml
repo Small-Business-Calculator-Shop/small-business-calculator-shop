@@ -1,0 +1,23 @@
+name: Maker Calculator regression tests
+on:
+  push:
+    branches:
+      - maker-calculator-launch-hardening
+  workflow_dispatch:
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check src/launch-hardening-engine.js
+          node --check tests/launch-hardening-tests.js
+          node --check tests/launch-hardening-engine-tests.js
+      - name: Run primary regression suite
+        run: node tests/launch-hardening-tests.js
+      - name: Run engine regression suite
+        run: node tests/launch-hardening-engine-tests.js
