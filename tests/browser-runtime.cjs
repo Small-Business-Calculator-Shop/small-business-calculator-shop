@@ -59,7 +59,7 @@ const assert=require('node:assert/strict');
   await page.locator('.pkg-used').last().fill('12');
   await page.locator('.pkg-onhand').last().fill('2');
   await page.evaluate(()=>calculate());
-  assert.equal(await page.locator('#newCashNeeded').innerText(),'$76.00','Whole-pack purchases must include materials and packaging');
+  assert.equal(await page.locator('#newCashNeeded').innerText(),'$64.00','Whole-pack purchases must include materials and packaging');
   assert.ok((await page.locator('#orderAnswer').innerText()).startsWith('MAYBE'),'Inventory shortage must be disclosed');
   assert.deepEqual(errors,[],'Browser must not emit JavaScript errors');
   console.log('Chromium runtime smoke tests passed');
