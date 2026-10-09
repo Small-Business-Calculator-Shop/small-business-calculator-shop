@@ -12,4 +12,5 @@ assert.match(html,/orderPrice\.value\.trim\(\)===''\?price:n\(orderPrice\.value\
 assert.match(html,/scenarioPrice\.value\.trim\(\)===''\?price:n\(scenarioPrice\.value\)/,'Zero scenario price fallback regression');
 assert.match(html,/scenarioYield\.value\.trim\(\)===''\?sellable:n\(scenarioYield\.value\)/,'Scenario yield fallback regression');
 assert.match(html,/document\.getElementById\('orderSales'\)\.textContent=money\(orderSales\)/,'Order sales display regression');
+assert.match(html,/else if\(orderSales<=0\)/,'Zero-revenue order must not be recommended YES');
 console.log('Browser code and DOM contract checks passed');
