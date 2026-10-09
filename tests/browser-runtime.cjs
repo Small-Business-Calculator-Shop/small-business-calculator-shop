@@ -14,6 +14,7 @@ const assert=require('node:assert/strict');
   await page.locator('#finishedOnHand').fill('10');
   await page.locator('#keepInStock').fill('15');
   await page.evaluate(()=>calculate());
+  console.log('Production diagnostic',await page.evaluate(()=>({yieldValue:document.getElementById('sellableYield').value,order:document.getElementById('orderQty').value,finished:document.getElementById('finishedOnHand').value,keep:document.getElementById('keepInStock').value,make:document.getElementById('needToMake').textContent,batches:document.getElementById('batchesNeeded').textContent,error:document.getElementById('error').textContent})));
   assert.equal(await page.locator('#batchesNeeded').innerText(),'3','Must produce three whole batches');
   assert.equal(await page.locator('#needToMake').innerText(),'25','Must protect Keep in Stock');
   assert.equal(await page.locator('#orderSales').innerText(),'$600.00','Order sales must display');
