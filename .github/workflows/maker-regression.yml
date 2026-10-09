@@ -19,6 +19,12 @@ jobs:
           node --check tests/launch-hardening-engine-tests.js
       - name: Check browser contract
         run: node tests/browser-contract.cjs
+      - name: Install browser test dependencies
+        run: npm install --no-save --package-lock=false playwright
+      - name: Install Chromium for browser tests
+        run: npx playwright install chromium
+      - name: Run real browser smoke tests
+        run: node tests/browser-runtime.cjs
       - name: Run primary regression suite
         run: node tests/launch-hardening-tests.js
       - name: Run engine regression suite
