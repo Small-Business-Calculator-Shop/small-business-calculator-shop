@@ -49,6 +49,18 @@ const assert=require('node:assert/strict');
   assert.equal(await page.locator('#promoRegularLeft').innerText(),'$30.00');
   assert.equal(await page.locator('#promoSaleLeft').innerText(),'$24.00');
   assert.equal(await page.locator('#extraSales').innerText(),'5');
+  await page.evaluate(()=>{addIngredient();addPackaging()});
+  await page.locator('.ing-price').last().fill('20');
+  await page.locator('.ing-bought').last().fill('100');
+  await page.locator('.ing-used').last().fill('50');
+  await page.locator('.ing-onhand').last().fill('10');
+  await page.locator('.pkg-price').last().fill('12');
+  await page.locator('.pkg-bought').last().fill('24');
+  await page.locator('.pkg-used').last().fill('12');
+  await page.locator('.pkg-onhand').last().fill('2');
+  await page.evaluate(()=>calculate());
+  assert.equal(await page.locator('#newCashNeeded').innerText(),'$76.00','Whole-pack purchases must include materials and packaging');
+  assert.ok((await page.locator('#orderAnswer').innerText()).startsWith('MAYBE'),'Inventory shortage must be disclosed');
   assert.deepEqual(errors,[],'Browser must not emit JavaScript errors');
   console.log('Chromium runtime smoke tests passed');
  }finally{await browser.close()}
