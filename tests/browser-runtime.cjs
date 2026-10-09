@@ -8,7 +8,7 @@ const assert=require('node:assert/strict');
   const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto('file://'+path.resolve('index.html'));
-  await page.locator('#sellableYield').fill('24');
+  await page.locator('#sellableYield').fill('12');
   await page.locator('#sellingPrice').fill('30');
   await page.locator('#orderQty').fill('20');
   await page.locator('#finishedOnHand').fill('10');
