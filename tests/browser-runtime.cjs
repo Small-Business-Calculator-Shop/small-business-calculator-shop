@@ -41,6 +41,14 @@ const assert=require('node:assert/strict');
   assert.ok((await page.locator('#orderAnswer').innerText()).startsWith('NO'),'Loss-making order should be NO');
   await page.locator('#otherCosts').fill('0');
   await page.locator('#orderPrice').fill('');
+  await page.locator('#discountPct').fill('20');
+  await page.locator('#normalSales').fill('20');
+  await page.evaluate(()=>calculate());
+  assert.equal(await page.locator('#promoRegular').innerText(),'$30.00');
+  assert.equal(await page.locator('#promoPrice').innerText(),'$24.00');
+  assert.equal(await page.locator('#promoRegularLeft').innerText(),'$30.00');
+  assert.equal(await page.locator('#promoSaleLeft').innerText(),'$24.00');
+  assert.equal(await page.locator('#extraSales').innerText(),'5');
   assert.deepEqual(errors,[],'Browser must not emit JavaScript errors');
   console.log('Chromium runtime smoke tests passed');
  }finally{await browser.close()}
