@@ -59,6 +59,7 @@ const assert=require('node:assert/strict');
   await page.locator('.pkg-used').last().fill('12');
   await page.locator('.pkg-onhand').last().fill('2');
   await page.evaluate(()=>calculate());
+  console.log('Inventory diagnostic',await page.evaluate(()=>({error:document.getElementById('error').textContent,errorDisplay:document.getElementById('error').style.display,resultsDisplay:document.getElementById('results').style.display,make:document.getElementById('needToMake').textContent,batches:document.getElementById('batchesNeeded').textContent,cash:document.getElementById('newCashNeeded').textContent,ingredients:ingredientData(),packaging:packagingData()})));
   assert.equal(await page.locator('#newCashNeeded').innerText(),'$64.00','Whole-pack purchases must include materials and packaging');
   assert.ok((await page.locator('#orderAnswer').innerText()).startsWith('MAYBE'),'Inventory shortage must be disclosed');
   assert.deepEqual(errors,[],'Browser must not emit JavaScript errors');
