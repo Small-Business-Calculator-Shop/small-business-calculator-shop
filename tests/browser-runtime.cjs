@@ -58,6 +58,7 @@ const assert=require('node:assert/strict');
   await page.locator('.pkg-bought').last().fill('24');
   await page.locator('.pkg-used').last().fill('12');
   await page.locator('.pkg-onhand').last().fill('2');
+  console.log('Inventory form diagnostic',await page.evaluate(()=>({ingredientRows:document.querySelectorAll('.ingredient').length,packagingRows:document.querySelectorAll('.package').length,ingredientValues:[...document.querySelectorAll('.ingredient input')].map(e=>[e.className,e.value]),packagingValues:[...document.querySelectorAll('.package input')].map(e=>[e.className,e.value])})));
   await page.evaluate(()=>calculate());
   console.log('Inventory diagnostic',await page.evaluate(()=>({error:document.getElementById('error').textContent,errorDisplay:document.getElementById('error').style.display,resultsDisplay:document.getElementById('results').style.display,make:document.getElementById('needToMake').textContent,batches:document.getElementById('batchesNeeded').textContent,cash:document.getElementById('newCashNeeded').textContent,ingredients:ingredientData(),packaging:packagingData()})));
   assert.equal(await page.locator('#newCashNeeded').innerText(),'$64.00','Whole-pack purchases must include materials and packaging');
