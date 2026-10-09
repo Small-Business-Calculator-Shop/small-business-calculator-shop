@@ -1,0 +1,33 @@
+const {chromium}=require('playwright');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ try{
+  const page=await browser.newPage();
+  const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('file://'+path.resolve('index.html'));
+  await page.locator('#sellableYield').fill('24');
+  await page.locator('#sellingPrice').fill('30');
+  await page.locator('#orderQty').fill('20');
+  await page.locator('#finishedOnHand').fill('10');
+  await page.locator('#keepInStock').fill('15');
+  await page.evaluate(()=>calculate());
+  assert.equal(await page.locator('#batchesNeeded').innerText(),'3','Must produce three whole batches');
+  assert.equal(await page.locator('#needToMake').innerText(),'25','Must protect Keep in Stock');
+  assert.equal(await page.locator('#orderSales').innerText(),'$600.00','Order sales must display');
+  await page.locator('#orderPrice').fill('0');
+  await page.evaluate(()=>calculate());
+  assert.equal(await page.locator('#orderSales').innerText(),'$0.00','Zero order price must be honored');
+  await page.locator('#orderQty').fill('2.5');
+  await page.evaluate(()=>calculate());
+  assert.match(await page.locator('#error').innerText(),/whole number/i,'Fractional order must fail');
+  await page.locator('#orderQty').fill('20');
+  await page.locator('#scenarioYield').fill('0');
+  await page.evaluate(()=>calculate());
+  assert.match(await page.locator('#error').innerText(),/at least 1/i,'Zero scenario yield must fail');
+  assert.deepEqual(errors,[],'Browser must not emit JavaScript errors');
+  console.log('Chromium runtime smoke tests passed');
+ }finally{await browser.close()}
+})().catch(e=>{console.error(e);process.exitCode=1});
