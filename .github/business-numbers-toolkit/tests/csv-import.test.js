@@ -1,0 +1,15 @@
+'use strict';
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const context={window:{}};vm.createContext(context);
+vm.runInContext(fs.readFileSync('js/csv-import.js','utf8'),context);
+const parse=context.window.ToolkitCSV.parse;
+let parsed=parse('\uFEFFProduct Name,Price,Notes\r\n"Blue, green soap",12.50,"made with ""care"""\r\n"Second item",8,"two\nlines"\r\n');
+assert.deepEqual(Array.from(parsed.headers),['Product Name','Price','Notes']);
+assert.equal(parsed.rows.length,2);
+assert.equal(parsed.rows[0]['Product Name'],'Blue, green soap');
+assert.equal(parsed.rows[0].Notes,'made with "care"');
+assert.equal(parsed.rows[1].Notes,'two\nlines');
+assert.throws(()=>parse('Name,Price\n"unfinished,10'),/ends inside a quoted field/);
+assert.throws(()=>parse('Name,Name\na,b'),/appears more than once/);
+assert.throws(()=>parse('Name,Price\na,1\nb,2',1),/more than 1 data rows/);
+console.log('PASS: CSV spreadsheet parsing, quoted fields, embedded newlines, and invalid-file checks');
