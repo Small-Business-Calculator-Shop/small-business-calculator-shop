@@ -1,0 +1,16 @@
+<!doctype html><meta charset="utf-8"><title>Toolkit browser smoke tests</title><div id="result">RUNNING</div>
+<script src="../../../js/templates.js"></script><script src="../../../js/engine.js"></script><script src="../../../js/storage.js"></script><script src="../../../js/transfer.js"></script><script>
+(async()=>{let tests=[];const check=(name,ok)=>{tests.push({name,ok:!!ok});if(!ok)throw Error(name)};
+try{
+ check('industry templates loaded',typeof ToolkitTemplates!=='undefined');
+ check('formula arithmetic',ToolkitEngine.evaluateFormula('(amount * quantity) / 2',{amount:12,quantity:3})===18);
+ check('malicious formula rejected',(()=>{try{ToolkitEngine.evaluateFormula('window.alert(1)',{amount:1,quantity:1});return false}catch{return true}})());
+ const sample={profile:{name:'Test Business'},records:[{id:'a',name:'Test'}],prices:[],offers:[],scenarios:[]};
+ await ToolkitStorage.writeActive(sample);check('primary IndexedDB read', (await ToolkitStorage.readActive()).data.profile.name==='Test Business');await ToolkitStorage.persist(sample);const snap=await ToolkitStorage.inspect();check('IndexedDB roundtrip',snap.data.profile.name==='Test Business'&&snap.data.records.length===1);
+ await ToolkitStorage.persist({...sample,profile:{name:'Second'}});check('IndexedDB history', (await ToolkitStorage.history()).length>=2);
+ const transfer={format:'fyscalos-toolkit-transfer',schemaVersion:1,business:sample.profile,activities:sample.records,pricingDecisions:[],sellingDecisions:[],planningScenarios:[]};check('portable import',ToolkitTransfer.parse(transfer).records.length===1);
+ check('invalid money rejected',(()=>{try{ToolkitTransfer.parse({...transfer,monthlyFixedCosts:'Infinity'});return false}catch{return true}})());
+ document.querySelector('#result').textContent='PASS '+tests.length+' tests';
+}catch(e){document.querySelector('#result').textContent='FAIL '+e.message+' '+JSON.stringify(tests)}
+})();
+</script>

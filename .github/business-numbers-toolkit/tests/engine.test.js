@@ -1,0 +1,16 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const context={window:{}};vm.createContext(context);
+for(const file of ['js/templates.js','js/engine.js'])vm.runInContext(fs.readFileSync(file,'utf8'),context,{filename:file});
+const engine=context.window.ToolkitEngine;
+assert.equal(Object.keys(context.window.ToolkitTemplates).length,8);
+assert.equal(engine.customCost([{amount:10,quantity:3},{amount:2,quantity:1}]),32);
+assert.throws(()=>engine.customCost([{amount:-1,quantity:1}]));
+assert.equal(engine.breakEven({price:20,variableCost:12,fixedCosts:100}),13);
+assert.equal(engine.salesTarget({price:20,variableCost:12,fixedCosts:100,goal:60}),20);
+assert.equal(engine.breakEven({price:10,variableCost:12,fixedCosts:100}),null);
+const calc=engine.analyze({yield:5,price:20,wastePercent:0,overhead:5,customCosts:[{amount:2,quantity:2}]},()=>({materials:10,packaging:5,labor:6,other:0}));
+assert.equal(calc.total,30);assert.equal(calc.unit,6);
+console.log('PASS: templates, custom costs, break-even, sales targets, and costing');

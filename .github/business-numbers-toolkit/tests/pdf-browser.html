@@ -1,0 +1,3 @@
+<!doctype html><meta charset="utf-8"><script src="../../../js/report-font-map.js"></script><script src="../../../js/pdf.js"></script><script>
+(async()=>{try{let blob;URL.createObjectURL=(b)=>{blob=b;return 'blob:test'};HTMLAnchorElement.prototype.click=function(){};await ToolkitPDF.download('Unicode PDF test',['J$3,650 — café, Ελληνικά, Кириллица, € £ ₦','Another line'], 'test.pdf');const bytes=new Uint8Array(await blob.arrayBuffer());document.body.textContent=bytes.length>10000&&new TextDecoder().decode(bytes.slice(0,8)).startsWith('%PDF-')?'PASS PDF browser render '+bytes.length:'FAIL invalid PDF'}catch(e){document.body.textContent='FAIL '+e.message}})();
+</script>
