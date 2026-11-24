@@ -5,6 +5,8 @@
 - Portable transfer-file validation now rejects invalid record types, non-finite financial goals, and oversized transfer data. Toolkit-to-Toolkit import is available; FyscalOS itself must implement its own importer.
 - The service worker cache version is updated for this package.
 - Spreadsheet CSV import maps columns to saved activities, previews rows, skips same-name duplicates by default, and adds data without replacing existing records. Direct `.xlsx` import is not included.
+- Added a lightweight offline Contacts register for suppliers, customers, prospects, retailers, service providers, and partners. Contact details, status, relationship notes, and follow-up dates are included in Toolkit backups and transfer exports.
+- Spreadsheet import remains limited to activity-level cost subtotals. Detailed cost lines, inventory, contacts, profile/settings, pricing, offers, scenarios, and marketing/sales data still need a comprehensive import path before the user’s broader data-import requirement is met.
 - Automated Node tests for calculations, formulas, CSV parsing, and PDF generation passed; JavaScript syntax checks passed.
 - A browser smoke-test harness is included under `.github/business-numbers-toolkit/tests/browser-smoke.html`, but browser execution was not certified in this environment.
 

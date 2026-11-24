@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const context={window:{}};vm.createContext(context);
+vm.runInContext(fs.readFileSync('js/transfer.js','utf8'),context,{filename:'js/transfer.js'});
+const base={format:'fyscalos-toolkit-transfer',schemaVersion:1,business:{name:'Test'},activities:[],pricingDecisions:[],sellingDecisions:[],planningScenarios:[],customCostCategories:[],monthlyFixedCosts:0,monthlyGoal:0};
+const contact={id:'c1',kind:'supplier',organization:'Oil Supplier',person:'A. Person',email:'a@example.com'};
+const imported=context.window.ToolkitTransfer.parse({...base,contacts:[contact]});
+assert.equal(JSON.stringify(imported.contacts),JSON.stringify([contact]));
+assert.deepEqual(JSON.parse(JSON.stringify(context.window.ToolkitTransfer.parse(base).contacts)),[]);
+assert.throws(()=>context.window.ToolkitTransfer.parse({...base,contacts:'invalid'}),/Invalid contacts records/);
+process.stdout.write('PASS: transfer export/import preserves contact records and validates contact arrays\n');

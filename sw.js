@@ -1,5 +1,5 @@
 'use strict';
-const CACHE='bnt-integrated-csv-import-2026-11-23';
+const CACHE='bnt-integrated-crm-2026-11-24';
 const ASSETS=['./','./index.html','./css/app.css','./js/templates.js','./js/engine.js','./js/pdf.js','./js/report-font-map.js','./js/report-font.ttf','./js/storage.js','./js/transfer.js','./js/csv-import.js','./js/app.js','./js/support.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>(k.startsWith('bnt-app-')||k.startsWith('bnt-integrated-'))&&k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()])));
